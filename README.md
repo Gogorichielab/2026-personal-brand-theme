@@ -2,6 +2,8 @@
 
 A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout.
 
+![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
+
 ## Requirements
 
 - Hugo Extended 0.146.0 or later
