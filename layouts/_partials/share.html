@@ -1,0 +1,24 @@
+{{- /* Plain share links (no third-party scripts) for params.share.destinations, plus a
+  copy-link button that copy.js adds. Hidden until it has something to show. */ -}}
+{{- $url := replace (urlquery .Permalink) "+" "%20" -}}
+{{- $title := replace (urlquery .Title) "+" "%20" -}}
+{{- $known := dict
+  "linkedin" (dict "name" "LinkedIn" "href" (printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $url))
+  "bluesky" (dict "name" "Bluesky" "href" (printf "https://bsky.app/intent/compose?text=%s%%20%s" $title $url))
+  "x" (dict "name" "X" "href" (printf "https://x.com/intent/post?text=%s&url=%s" $title $url))
+  "email" (dict "name" (T "share_email") "href" (printf "mailto:?subject=%s&body=%s" $title $url))
+-}}
+{{- $links := slice -}}
+{{- range site.Params.share.destinations -}}
+  {{- with index $known . -}}
+    {{- $links = $links | append . -}}
+  {{- else -}}
+    {{- errorf "params.share.destinations: unknown destination %q. Use any of: linkedin, bluesky, x, email." . -}}
+  {{- end -}}
+{{- end -}}
+<nav class="article-share" aria-label="{{ T "share_aria" }}" data-url="{{ .Permalink }}"{{ if not $links }} hidden{{ end }}>
+	<span class="share-label">{{ T "share_label" }}</span>
+	{{- range $links }}
+	<a href="{{ .href }}">{{ .name }}</a>
+	{{- end }}
+</nav>

@@ -11,9 +11,9 @@
   {{- else if .Content -}}
     {{- $description = .Summary -}}
   {{- else if eq .Kind "term" -}}
-    {{- $description = printf "Browse posts about %s on %s." .Title .Site.Title -}}
+    {{- $description = T "desc_term" (dict "Topic" .Title "Site" .Site.Title) -}}
   {{- else if eq .Kind "taxonomy" -}}
-    {{- $description = printf "Explore %s on %s." (.Title | lower) .Site.Title -}}
+    {{- $description = T "desc_taxonomy" (dict "Name" (.Title | lower) "Site" .Site.Title) -}}
   {{- else -}}
     {{- $description = .Site.Params.description -}}
   {{- end -}}
@@ -23,9 +23,10 @@
 {{- if in (slice "home" "section" "taxonomy" "term") .Kind -}}
   {{- $paginator := partial "archive-paginator.html" . -}}
   {{- if gt $paginator.PageNumber 1 -}}
-    {{- $title = printf "%s · Page %d" $title $paginator.PageNumber -}}
+    {{- $page := T "page_n" (dict "Number" $paginator.PageNumber) -}}
+    {{- $title = printf "%s · %s" $title $page -}}
     {{- $canonical = $paginator.URL | absURL -}}
-    {{- $description = printf "%s (Page %d)" $description $paginator.PageNumber -}}
+    {{- $description = printf "%s (%s)" $description $page -}}
   {{- end -}}
 {{- end -}}
 <title>{{ $title }}</title>

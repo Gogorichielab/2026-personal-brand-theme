@@ -4,7 +4,7 @@
 	{{- $posts = $posts | append (dict
 		"title" .Title
 		"url" .RelPermalink
-		"date" (.Date.Format "Jan 2, 2006")
+		"date" (time.Format ":date_medium" .Date)
 		"summary" (.Summary | plainify | htmlUnescape | truncate 170)
 		"tags" $tags
 		"text" (.Plain | htmlUnescape)

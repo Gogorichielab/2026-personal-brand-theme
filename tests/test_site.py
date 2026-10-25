@@ -111,6 +111,10 @@ class SiteTests(unittest.TestCase):
         (source / "content" / "blog" / "draft-note.md").write_text(
             '---\ntitle: "Draft note"\ndate: 2026-10-01\ndraft: true\ntags: ["notes"]\n---\nDraft.\n'
         )
+        # A title with spaces, Unicode and reserved characters for share links.
+        (source / "content" / "blog" / "share-check.md").write_text(
+            '---\ntitle: "Tom & Jerry: café? 50%"\ndate: 2025-01-01\n---\nShare check.\n'
+        )
         # A bundled image narrower than every candidate width, and an external one.
         small = source / "content" / "image-check"
         small.mkdir()
@@ -265,7 +269,7 @@ class SiteTests(unittest.TestCase):
         for output, base, prefix in self.sites:
             with self.subTest(base=base):
                 entries = json.loads((output / "blog/search.json").read_text())
-                self.assertEqual(len(entries), 18)
+                self.assertEqual(len(entries), 19)
                 for entry in entries:
                     self.assertTrue(entry["url"].startswith(prefix + "blog/"))
                 for path in output.rglob("*.html"):
@@ -362,14 +366,63 @@ class SiteTests(unittest.TestCase):
                 self.assertEqual(external["src"], "https://example.net/photo.jpg")
                 self.assertNotIn("srcset", external)
 
-    def test_copy_code_script_only_where_needed(self):
+    def test_copy_script_only_where_needed(self):
+        script = re.compile(r'<script src="?[^ >"]*/js/copy\.min[^>]*>')
         for output, _, _ in self.sites:
-            self.assertIn("code-copy", (output / "blog/copying-code-examples/index.html").read_text())
-            self.assertNotIn("code-copy", (output / "blog/first-post/index.html").read_text())
-            self.assertNotIn("code-copy", (output / "index.html").read_text())
-        result, output = self.build("no-copy", "[params.copy_code]\nenabled = false\n")
+            code = script.search((output / "blog/copying-code-examples/index.html").read_text())
+            self.assertIn("data-code", code.group(0))
+            post = script.search((output / "blog/first-post/index.html").read_text())  # copy link only
+            self.assertNotIn("data-code", post.group(0))
+            self.assertIsNone(script.search((output / "index.html").read_text()))
+        result, output = self.build(
+            "no-copy", "[params.copy_code]\nenabled = false\n[params.share]\nenabled = false\n"
+        )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertNotIn("code-copy", (output / "blog/copying-code-examples/index.html").read_text())
+        page = (output / "blog/copying-code-examples/index.html").read_text()
+        self.assertIsNone(script.search(page))
+        self.assertNotIn("article-share", page)
+
+    def test_share_links(self):
+        for output, base, _ in self.sites:
+            with self.subTest(base=base):
+                page = (output / "blog/share-check/index.html").read_text()
+                hrefs = re.findall(r'href="?([^" >]+)"?>(?:LinkedIn|Bluesky|Email)<', page)
+                self.assertEqual(len(hrefs), 3)  # only the configured destinations
+                url = (base + "blog/share-check/").replace(":", "%3A").replace("/", "%2F")
+                title = "Tom%20%26%20Jerry%3A%20caf%C3%A9%3F%2050%25"
+                linkedin, bluesky, email = (h.replace("&amp;", "&") for h in hrefs)
+                self.assertEqual(linkedin, "https://www.linkedin.com/sharing/share-offsite/?url=" + url)
+                self.assertEqual(bluesky, f"https://bsky.app/intent/compose?text={title}%20{url}")
+                self.assertEqual(email, f"mailto:?subject={title}&body={url}")
+        result, _ = self.build("bad-share", '[params.share]\ndestinations = ["myspace"]\n')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("params.share.destinations", result.stderr)
+
+    @staticmethod
+    def switcher(page):
+        nav = re.search(r'<nav class="?lang-nav.*?</nav>', page, re.S)
+        return nav and dict((lang, href) for href, lang in re.findall(r'href="?([^" >]+)"? lang="?(\w+)', nav.group(0)))
+
+    def test_translations_and_language_switcher(self):
+        for output, base, prefix in self.sites:
+            with self.subTest(base=base):
+                spanish = (output / "es/index.html").read_text()
+                self.assertRegex(spanish, r'<html lang="?es')
+                self.assertIn("Saltar al contenido", spanish)
+                self.assertIn("Built with", spanish)  # missing from es.toml, so English is used
+                self.assertNotIn("Saltar al contenido", (output / "index.html").read_text())
+                # A translated page links to its translation; others fall back to the language's home.
+                self.assertEqual(self.switcher((output / "blog/first-post/index.html").read_text())["es"],
+                                 prefix + "es/blog/first-post/")
+                self.assertEqual(self.switcher((output / "blog/notes-on-writing/index.html").read_text())["es"],
+                                 prefix + "es/")
+                self.assertEqual(self.switcher(spanish)["en"], prefix)
+                entries = json.loads((output / "es/blog/search.json").read_text())
+                self.assertEqual([e["url"] for e in entries], [prefix + "es/blog/first-post/"])
+                self.assertIn("12 de enero de 2026", (output / "es/blog/first-post/index.html").read_text())
+        result, output = self.build("one-language", 'disableLanguages = ["es"]\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("lang-nav", (output / "index.html").read_text())
 
     def test_dark_appearance(self):
         for output, _, _ in self.sites:  # the example site opts into "auto"

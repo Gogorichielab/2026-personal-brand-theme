@@ -23,7 +23,7 @@
 [![Repository size](https://img.shields.io/github/repo-size/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
 
 [![Minimum Hugo Extended version](https://img.shields.io/badge/Hugo_Extended-%E2%89%A5_0.146.0-FF4088?logo=hugo&logoColor=white)](https://gohugo.io/installation/)
-[![Hugo version used in CI](https://img.shields.io/badge/Hugo_CI-0.152.2-FF4088?logo=hugo&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/.github/workflows/pages.yml)
+[![Hugo version used in CI](https://img.shields.io/badge/Hugo_CI-0.168.0-FF4088?logo=hugo&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/.github/workflows/pages.yml)
 [![HTML templates](https://img.shields.io/badge/Templates-HTML-E34F26?logo=html5&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/layouts)
 [![CSS styles](https://img.shields.io/badge/Styles-CSS-663399?logo=css&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/css)
 [![JavaScript search](https://img.shields.io/badge/Search-JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/js)
@@ -33,9 +33,11 @@
 [![Optional client-side search](https://img.shields.io/badge/Client--side_search-optional-2D6089)](#blog-search)
 [![RSS feed](https://img.shields.io/badge/Feed-RSS-FFA500?logo=rss&logoColor=white)](https://gogorichielab.github.io/2026-personal-brand-theme/blog/index.xml)
 [![Social previews](https://img.shields.io/badge/Social_previews-Open_Graph_%2B_Twitter-2D6089)](#search-and-social-previews)
+[![Translations](https://img.shields.io/badge/Translations-English_%2B_Spanish-2D6089)](#translations)
+[![Dark mode](https://img.shields.io/badge/Dark_mode-automatic-2D6089)](#brand-colors)
 [![Structured data](https://img.shields.io/badge/JSON--LD-BlogPosting-2D6089)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/layouts/_partials/seo-schema.html)
 
-A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout.
+A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, copy buttons on code, share links, and translations with a language switcher.
 
 ![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
 
@@ -178,7 +180,42 @@ Add a **Copy code** button above every code block in your posts:
   enabled = true
 ```
 
-The button copies the code exactly, without line numbers, and confirms with "Copied". Screen readers hear the same confirmation, and focus stays on the button. If the browser blocks clipboard access, the button says "Copy failed" and the code can still be selected by hand. The small script loads only on pages that contain code. Without JavaScript, no button appears.
+The button copies the code exactly, without line numbers, and confirms with "Copied". Screen readers hear the same confirmation, and focus stays on the button. If the browser blocks clipboard access, the button says "Copy failed" and the code can still be selected by hand. The small script loads only on pages that contain code, or on posts with sharing turned on. Without JavaScript, no button appears.
+
+## Sharing
+
+Add a share row to blog posts:
+
+```toml
+[params.share]
+  enabled = true
+  destinations = ["linkedin", "bluesky", "email"]  # any of: linkedin, bluesky, x, email
+```
+
+Each destination is a plain link with the post's title and canonical URL encoded into it. No third-party scripts are loaded and nothing is tracked. Only the destinations you list appear, and an unknown name stops the build. A **Copy link** button copies the post's canonical URL. If the browser blocks clipboard access, the link is shown so it can be copied by hand. Without JavaScript, the copy button doesn't appear, but the share links still work.
+
+## Translations
+
+All text the theme writes itself (labels, buttons, search messages, dates and screen-reader text) comes from translation files. The theme ships English (`i18n/en.toml`) and Spanish (`i18n/es.toml`). To add a language, copy `i18n/en.toml` to `i18n/<code>.toml` in your site and translate the values. Dates follow each language's conventions automatically.
+
+A key missing from a language falls back to your site's default language. If your default language has no translation file, copy `en.toml` for it, or its labels will be empty.
+
+On a multilingual site, the header shows a language switcher. It links to the translated version of the current page, or to that language's homepage when there isn't one. Single-language sites don't show it. Give each language a `language_label` param for the switcher, otherwise the language code is shown:
+
+```toml
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    language_label = "English"
+[languages.es]
+  weight = 2
+  [languages.es.params]
+    language_label = "Español"
+    [languages.es.params.home]
+      headline = ["Pequeñas herramientas.", "Notas útiles."]
+```
+
+Text you write in params and front matter, such as homepage headlines or button labels, is translated per language as shown above. Settings you don't override are shared. Links to the blog and the About page follow the current language. Other links you set in params are used as written.
 
 ## Article Images
 
@@ -238,7 +275,7 @@ All three built-in presets meet WCAG AA contrast for body text. Custom colors ar
 
 ## Validation
 
-Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, and search data.
+Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, responsive images, copy buttons, share links, translations and brand colors.
 
 See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 

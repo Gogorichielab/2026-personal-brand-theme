@@ -1,11 +1,11 @@
 {{ define "main" }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">404 / Off the beaten path</p>
-		<h1>This page wandered off<span>.</span></h1>
-		<p>Let’s get you back to something interesting.</p>
+		<p class="eyebrow">{{ T "not_found_eyebrow" }}</p>
+		<h1>{{ T "not_found_title" }}<span>.</span></h1>
+		<p>{{ T "not_found_text" }}</p>
 		<div class="actions">
-			<a class="button" href="{{ site.Home.RelPermalink }}">Head home →</a>
-			<a class="text-link" href="{{ "blog/" | relURL }}">Explore the blog →</a>
+			<a class="button" href="{{ site.Home.RelPermalink }}">{{ T "head_home" }} →</a>
+			<a class="text-link" href="{{ "blog/" | relLangURL }}">{{ T "explore_blog" }} →</a>
 		</div>
 	</section>
 {{ end }}

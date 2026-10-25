@@ -18,13 +18,15 @@
 		{{ $js := resources.Get "js/personal.js" | minify | fingerprint }}
 		<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 	{{ end }}
-	{{ if and .IsPage .Site.Params.copy_code.enabled (strings.Contains .Content "<pre") }}
-		{{ $copy := resources.Get "js/code-copy.js" | minify | fingerprint }}
-		<script src="{{ $copy.RelPermalink }}" integrity="{{ $copy.Data.Integrity }}" defer></script>
+	{{ $copyCode := and .IsPage .Site.Params.copy_code.enabled (strings.Contains .Content "<pre") }}
+	{{ $copyLink := and .IsPage .Site.Params.share.enabled (eq .Section "blog") }}
+	{{ if or $copyCode $copyLink }}
+		{{ $copy := resources.Get "js/copy.js" | minify | fingerprint }}
+		<script src="{{ $copy.RelPermalink }}" integrity="{{ $copy.Data.Integrity }}" defer{{ if $copyCode }} data-code="true"{{ end }} data-copied="{{ T "copied" }}" data-copy-failed="{{ T "copy_failed" }}" data-copy-code="{{ T "copy_code" }}" data-copy-code-done="{{ T "copy_code_done" }}" data-copy-code-failed="{{ T "copy_code_failed" }}" data-copy-link="{{ T "copy_link" }}" data-copy-link-done="{{ T "copy_link_done" }}" data-copy-link-failed="{{ T "copy_link_failed" }}"></script>
 	{{ end }}
 </head>
 <body{{ if .IsHome }} class="home"{{ else if eq .Type "speaking" }} class="speaking-page"{{ end }}>
-	<a class="skip-link" href="#main">Skip to content</a>
+	<a class="skip-link" href="#main">{{ T "skip_to_content" }}</a>
 	{{ partial "brand-header.html" . }}
 	<main id="main">
 		{{ block "main" . }}{{ end }}
