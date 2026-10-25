@@ -13,6 +13,10 @@ rss = "RSS"
 footer_product_of = "Product of"
 footer_built_with = "Built with"
 explore_topics = "Explore all topics"
+appearance = "Appearance"
+appearance_light = "Light"
+appearance_dark = "Dark"
+appearance_system = "System"
 
 # Archives and pagination
 pagination_aria = "Article pages"
@@ -95,6 +99,7 @@ home_cta_eyebrow = "Keep the conversation going"
 home_cta_title = "Good things start with a hello."
 home_cta_text = "Questions, ideas, or a shared curiosity. I'd love to connect."
 home_cta_link = "Get in touch"
+home_profile_links = "Profile links"
 
 # Projects and speaking defaults
 projects_eyebrow = "Always a side project"

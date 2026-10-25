@@ -4,6 +4,10 @@
 {{ $headline := $home.headline | default (slice (T "home_headline_1") (T "home_headline_2")) }}
 {{ $headlineAccent := $home.headline_accent | default (T "home_headline_accent") }}
 {{ $intro := $home.intro | default (slice (T "home_intro_1") (T "home_intro_2")) }}
+{{ $layout := $home.layout | default "full" }}
+{{ if not (in (slice "full" "compact") $layout) }}
+	{{ errorf "params.home.layout: %q is not supported. Use \"full\" or \"compact\"." $layout }}
+{{ end }}
 {{ $paginator := partial "archive-paginator.html" . }}
 {{ if gt $paginator.PageNumber 1 }}
 	<section class="page-intro wrap">
@@ -19,6 +23,23 @@
 			{{ end }}
 		</div>
 		{{ partial "brand-pagination.html" . }}
+	</section>
+{{ else if eq $layout "compact" }}
+	<section class="profile wrap">
+		{{ with $author.image }}<img class="profile-portrait" src="{{ . | relURL }}" alt="{{ $author.image_alt | default ($author.name | default $.Site.Title) }}" width="160" height="160" fetchpriority="high">{{ end }}
+		<h1>{{ $author.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></h1>
+		{{ with $author.location }}<p class="eyebrow">{{ . }}</p>{{ end }}
+		<div class="hero-intro">
+			{{ range $intro }}<p>{{ . }}</p>{{ end }}
+		</div>
+		<nav aria-label="{{ T "home_profile_links" }}">
+			<ul class="profile-links">
+				<li><a href="{{ $home.about_url | default "about/" | relLangURL }}">{{ $home.about_text | default (T "home_about_text") }}</a></li>
+				<li><a href="{{ $home.blog_url | default "blog/" | relLangURL }}">{{ $home.blog_text | default (T "home_blog_text") }}</a></li>
+				{{ range .Site.Params.social }}<li><a href="{{ .url }}">{{ .name }} <span aria-hidden="true">↗</span></a></li>{{ end }}
+				{{ with $home.cta_url }}<li><a href="{{ . | relURL }}">{{ $home.cta_link_text | default (T "home_cta_link") }} <span aria-hidden="true">↗</span></a></li>{{ end }}
+			</ul>
+		</nav>
 	</section>
 {{ else }}
 		<section class="hero wrap{{ if not $author.image }} hero-no-portrait{{ end }}">

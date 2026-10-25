@@ -1,5 +1,6 @@
 {{- /* Returns a CSS resource with the palette: preset values, then params.colors overrides.
-  With appearance "auto", the night palette applies when the visitor's system prefers dark.
+  With appearance "auto" or "toggle", the night palette applies when the visitor's system prefers dark,
+  unless the footer control (toggle only) set data-appearance on <html> to the visitor's choice.
   Presets live here rather than in data/: .Site.Data is deprecated from Hugo 0.156 and hugo.Data doesn't exist in 0.146. */ -}}
 {{- $presets := dict
   "navy" (dict
@@ -19,8 +20,8 @@
   {{- errorf "params.colors.preset: unknown preset %q. Use one of: navy, forest, night." $name -}}
 {{- end -}}
 {{- $appearance := $config.appearance | default "light" -}}
-{{- if not (in (slice "light" "auto") $appearance) -}}
-  {{- errorf "params.colors.appearance: %q is not supported. Use \"light\" or \"auto\"." $appearance -}}
+{{- if not (in (slice "light" "auto" "toggle") $appearance) -}}
+  {{- errorf "params.colors.appearance: %q is not supported. Use \"light\", \"auto\" or \"toggle\"." $appearance -}}
 {{- end -}}
 {{- range $key, $_ := $config -}}
   {{- if and (not (in (slice "preset" "appearance") $key)) (not (isset $palette $key)) -}}
@@ -36,11 +37,11 @@
   {{- $css = printf "%s--%s:%s;" $css (replace $key "_" "-") $value -}}
 {{- end -}}
 {{- $css = printf ":root{%s}" $css -}}
-{{- if eq $appearance "auto" -}}
+{{- if ne $appearance "light" -}}
   {{- $night := "" -}}
   {{- range $key, $value := index $presets "night" -}}
     {{- $night = printf "%s--%s:%s;" $night (replace $key "_" "-") $value -}}
   {{- end -}}
-  {{- $css = printf "%s:root{color-scheme:light dark}@media (prefers-color-scheme:dark){:root{%s}}" $css $night -}}
+  {{- $css = printf "%s:root{color-scheme:light dark}@media (prefers-color-scheme:dark){:root:not([data-appearance=light]){%s}}:root[data-appearance=dark]{%scolor-scheme:dark}:root[data-appearance=light]{color-scheme:light}" $css $night $night -}}
 {{- end -}}
 {{- return resources.FromString "css/colors.css" $css -}}

@@ -37,7 +37,7 @@
 [![Dark mode](https://img.shields.io/badge/Dark_mode-automatic-2D6089)](#brand-colors)
 [![Structured data](https://img.shields.io/badge/JSON--LD-BlogPosting-2D6089)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/layouts/_partials/seo-schema.html)
 
-A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, article series, copy buttons on code, share links, and translations with a language switcher.
+A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, article series, a compact profile homepage, copy buttons on code, share links, and translations with a language switcher.
 
 ![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
 
@@ -105,6 +105,17 @@ Homepage highlights are optional repeatable entries:
 	url = "projects/"
 	link_text = "Explore projects"
 ```
+
+## Homepage Layout
+
+The homepage has two layouts. `full` (the default) is the homepage shown above: the hero, interest band, latest posts, optional highlights and contact section. `compact` is a single centered profile for small personal sites. It shows your portrait, name, location and introduction, then a column of links: About, the blog, each `params.social` link, and `params.home.cta_url` when set.
+
+```toml
+[params.home]
+  layout = "compact"  # "full" (default) or "compact"
+```
+
+The compact layout reuses settings you already have (`params.author`, `params.home.intro`, `about_url`/`about_text`, `blog_url`/`blog_text`, `cta_url`/`cta_link_text` and `params.social`), so there's nothing new to fill in. Anything you leave out, such as the portrait, is simply not shown. An unknown layout name stops the build with a message naming the setting.
 
 ## Page Headings
 
@@ -274,10 +285,12 @@ Pick a color preset and override individual colors under `params.colors`. Withou
 [params.colors]
   preset = "forest"   # "navy" (default), "forest" or "night"
   accent = "#1f5c8a"  # optional: overrides the preset's value
-  appearance = "auto" # optional: "light" (default) or "auto"
+  appearance = "auto" # optional: "light" (default), "auto" or "toggle"
 ```
 
-With `appearance = "auto"`, visitors whose system is set to dark mode see the built-in `night` palette. It switches with the system setting, needs no JavaScript and doesn't flash the wrong colors on load. Your color overrides apply to the light palette only. `preset = "night"` makes a site always dark. There's no on-page toggle yet.
+With `appearance = "auto"`, visitors whose system is set to dark mode see the built-in `night` palette. It switches with the system setting, needs no JavaScript and doesn't flash the wrong colors on load. Your color overrides apply to the light palette only. `preset = "night"` makes a site always dark.
+
+With `appearance = "toggle"`, the site follows the system setting the same way, and the footer also gets a **Light / Dark / System** control. A visitor's Light or Dark choice is remembered in their browser and wins over the system setting on every page. System goes back to following the system. A small inline script applies the saved choice before the page draws, so there's no flash of the wrong colors. Without JavaScript, the control is hidden and the site follows the system setting. If the browser blocks storage, the choice applies until the visitor leaves the page.
 
 Each color is the preset's value unless you set it. Colors must be hex values such as `#2d6089`. An unknown preset or `appearance` value, an unknown color name or a value that isn't a hex color stops the build with a message naming the setting.
 
@@ -300,7 +313,7 @@ All three built-in presets meet WCAG AA contrast for body text. Custom colors ar
 
 ## Validation
 
-Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, series, responsive images, copy buttons, share links, translations and brand colors.
+Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, series, the appearance control, the compact homepage, responsive images, copy buttons, share links, translations and brand colors.
 
 See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 

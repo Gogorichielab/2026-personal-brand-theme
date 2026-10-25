@@ -467,7 +467,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("lang-nav", (output / "index.html").read_text())
 
     def test_dark_appearance(self):
-        for output, _, _ in self.sites:  # the example site opts into "auto"
+        for output, _, _ in self.sites:  # the example site opts into "toggle", which includes "auto"
             css = self.stylesheet(output)
             self.assertIn("prefers-color-scheme:dark", css)
             self.assertIn("--ink:#e4edf6", css)
@@ -480,6 +480,53 @@ class SiteTests(unittest.TestCase):
         result, _ = self.build("bad-appearance", '[params.colors]\nappearance = "dim"\n')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("params.colors.appearance", result.stderr)
+
+    def test_appearance_toggle(self):
+        for output, base, _ in self.sites:
+            with self.subTest(base=base):
+                page = (output / "index.html").read_text()
+                head = page.split("</head>", 1)[0]
+                self.assertIn('localStorage.getItem("appearance")', head)  # inline, so a saved choice applies before paint
+                control = re.search(r'<div class="?appearance"?.*?</div>', page, re.S).group(0)
+                self.assertRegex(control, r'role="?group"? aria-labelledby="?appearance-label"? hidden')
+                self.assertEqual(re.findall(r'value="?(\w+)"?>', control), ["light", "dark", "system"])
+                self.assertIn(">Oscuro<", (output / "es/index.html").read_text())
+                css = self.stylesheet(output)
+                self.assertIn(":root[data-appearance=dark]{", css)
+                self.assertIn(":root:not([data-appearance=light])", css)
+        result, output = self.build("auto-only", '[params.colors]\nappearance = "auto"\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (output / "index.html").read_text()
+        self.assertNotIn("localStorage", page)
+        self.assertNotIn('class="appearance"', page)
+        self.assertIn("prefers-color-scheme:dark", self.stylesheet(output))
+
+    def test_compact_profile_homepage(self):
+        for output, base, _ in self.sites:  # the example site keeps the default "full" layout
+            with self.subTest(base=base):
+                page = (output / "index.html").read_text()
+                self.assertIn("latest-grid", page)
+                self.assertNotIn('class="profile', page)
+        result, output = self.build("compact", '[params.home]\nlayout = "compact"\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (output / "index.html").read_text()
+        profile = re.search(r'<section class="profile wrap">.*?</section>', page, re.S).group(0)
+        self.assertIn("<h1>Example Person", profile)
+        self.assertIn('class="profile-portrait"', profile)
+        links = re.findall(r'<li><a href="([^"]+)">', profile)
+        self.assertEqual(links, ["/about/", "/blog/", "https://github.com/example",
+                                 "https://www.linkedin.com/in/example", "/contact/"])
+        self.assertNotIn("latest-grid", page)  # identity and links lead; the blog is one link away
+        self.assertEqual(page.count("<h1"), 1)
+        # No portrait: no broken image, the rest still renders.
+        result, output = self.build("compact-no-portrait", '[params.home]\nlayout = "compact"\n[params.author]\nimage = ""\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (output / "index.html").read_text()
+        self.assertNotIn("profile-portrait", page)
+        self.assertIn('class="profile-links"', page)
+        result, _ = self.build("bad-layout", '[params.home]\nlayout = "blog"\n')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("params.home.layout", result.stderr)
 
     def test_default_brand_colors(self):
         for output, _, _ in self.sites:
