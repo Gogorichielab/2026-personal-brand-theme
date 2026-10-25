@@ -91,6 +91,7 @@ home_cta_eyebrow = "Sigamos conversando"
 home_cta_title = "Las cosas buenas empiezan con un hola."
 home_cta_text = "Preguntas, ideas o una curiosidad compartida. Me encantaría conectar."
 home_cta_link = "Ponte en contacto"
+home_profile_links = "Enlaces del perfil"
 
 projects_eyebrow = "Siempre un proyecto paralelo"
 projects_heading = "Hecho por curiosidad"

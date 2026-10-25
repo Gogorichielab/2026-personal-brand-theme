@@ -79,3 +79,11 @@ body.speaking-page { background: var(--stage); }
 .appearance span{color:var(--muted);margin-right:6px}
 .appearance button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:4px 12px;font:600 12px/1.4 var(--text);cursor:pointer}
 .appearance button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.profile{max-width:560px;text-align:center;padding-block:80px 90px}
+.profile-portrait{width:160px;height:160px;border-radius:50%;object-fit:cover;border:1px solid var(--frame-border);background:var(--frame)}
+.profile h1{font-size:clamp(44px,6vw,64px);margin-top:28px}
+.profile h1 span{color:var(--accent)}
+.profile .eyebrow{justify-content:center;margin:16px 0 0}
+.profile-links{list-style:none;padding:0;margin:36px 0 0;display:grid;gap:12px}
+.profile-links a{display:block;padding:15px 20px;border:1px solid var(--ink);text-decoration:none;font-weight:700;font-size:14px}
+.profile-links a:hover{background:var(--ink);color:var(--paper)}
