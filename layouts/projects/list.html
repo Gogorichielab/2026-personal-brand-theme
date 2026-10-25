@@ -1,0 +1,24 @@
+{{ define "main" }}
+	<section class="page-intro wrap">
+		<p class="eyebrow">Always a side project</p>
+		<h1>Built out of curiosity<span>.</span></h1>
+		<div class="intro-copy">{{ .Content }}</div>
+		{{ with .Site.Params.brand.github_url }}<a class="button" href="{{ . }}">Explore my GitHub <span aria-hidden="true">↗</span></a>{{ end }}
+	</section>
+	<section class="wrap section-tight">
+		<div class="section-heading">
+			<h2>From the workbench<span>.</span></h2>
+		</div>
+		<div class="archive-grid">
+			{{ $projects := slice }}
+			{{ range where .Site.RegularPages "Section" "blog" }}
+				{{ if in (apply (.Params.tags | default slice) "lower" ".") "project" }}
+					{{ $projects = $projects | append . }}
+				{{ end }}
+			{{ end }}
+			{{ range $projects }}
+				{{ partial "writing-card.html" . }}
+			{{ end }}
+		</div>
+	</section>
+{{ end }}

@@ -1,0 +1,13 @@
+{{- $posts := slice -}}
+{{- range .RegularPagesRecursive -}}
+	{{- $tags := .Params.tags | default slice -}}
+	{{- $posts = $posts | append (dict
+		"title" .Title
+		"url" .RelPermalink
+		"date" (.Date.Format "Jan 2, 2006")
+		"summary" (.Summary | plainify | htmlUnescape | truncate 170)
+		"tags" $tags
+		"text" (.Plain | htmlUnescape)
+	) -}}
+{{- end -}}
+{{- $posts | jsonify -}}

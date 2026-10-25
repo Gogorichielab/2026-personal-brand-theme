@@ -1,0 +1,95 @@
+{{ define "main" }}
+{{ $home := .Site.Params.home | default dict }}
+{{ $author := .Site.Params.author | default dict }}
+{{ $headline := $home.headline | default (slice "Curiosity." "Code.") }}
+{{ $headlineAccent := $home.headline_accent | default "Community." }}
+{{ $intro := $home.intro | default (slice "A personal site about the work, ideas, and people that matter to me." "Follow along as I learn, build, and share what I discover.") }}
+{{ $paginator := .Paginate (where .Site.RegularPages "Section" "blog") }}
+{{ if gt $paginator.PageNumber 1 }}
+	<section class="page-intro wrap">
+		<p class="eyebrow">{{ $home.archive_eyebrow | default "From the archive" }}</p>
+		<h1>{{ $home.archive_title | default "More from the journey" }}<span>.</span></h1>
+		<p><a href="{{ "blog/" | relURL }}">Search and explore the full blog →</a></p>
+	</section>
+	<section class="section-tight wrap">
+		<h2 class="sr-only">Articles</h2>
+		<div class="archive-grid">
+			{{ range $paginator.Pages }}
+				{{ partial "writing-card.html" . }}
+			{{ end }}
+		</div>
+		{{ partial "brand-pagination.html" . }}
+	</section>
+{{ else }}
+		<section class="hero wrap{{ if not $author.image }} hero-no-portrait{{ end }}">
+		<div class="hero-copy">
+			<p class="eyebrow"><span class="small-rule"></span> {{ $author.name | default .Site.Title }}{{ with $author.location }} / {{ . }}{{ end }}</p>
+			<h1>{{ range $index, $line := $headline }}{{ if $index }}<br>{{ end }}{{ $line }}{{ end }}<br><span>{{ $headlineAccent }}</span></h1>
+			<div class="hero-intro">
+				{{ range $intro }}<p>{{ . }}</p>{{ end }}
+			</div>
+			<div class="actions">
+				<a class="button" href="{{ $home.about_url | default "about/" | relURL }}">{{ $home.about_text | default "A little about me" }} <span aria-hidden="true">↗</span></a>
+				<a class="text-link" href="{{ $home.blog_url | default "blog/" | relURL }}">{{ $home.blog_text | default "Read the blog" }} <span aria-hidden="true">→</span></a>
+			</div>
+		</div>
+		{{ with $author.image }}
+			<figure class="hero-portrait">
+				<div class="portrait-frame"><img src="{{ . | relURL }}" alt="{{ $author.image_alt | default ($author.name | default $.Site.Title) }}" width="800" height="800" fetchpriority="high"></div>
+				{{ with $home.portrait_caption }}<figcaption><span>{{ . }}</span><span aria-hidden="true">↗</span></figcaption>{{ end }}
+			</figure>
+		{{ end }}
+	</section>
+	<div class="interest-band">
+		<div class="wrap">
+			{{ range $index, $area := ($home.areas | default (slice "Ideas" "Projects" "Community")) }}{{ if $index }}<i aria-hidden="true">✳</i>{{ end }}<span>{{ $area }}</span>{{ end }}
+		</div>
+	</div>
+	<section class="section wrap" aria-labelledby="writing-title">
+		<div class="section-heading">
+			<div><p class="eyebrow">{{ $home.latest_eyebrow | default "Notes from the journey" }}</p><h2 id="writing-title">{{ $home.latest_title | default "Lately, on the blog" }}<span>.</span></h2></div>
+			<a class="text-link" href="{{ $home.blog_url | default "blog/" | relURL }}">{{ $home.latest_link_text | default "All the posts" }} <span aria-hidden="true">→</span></a>
+		</div>
+		<div class="latest-grid">
+			{{ range first 3 (where .Site.RegularPages "Section" "blog") }}
+				{{ partial "writing-card.html" . }}
+			{{ end }}
+		</div>
+		<div class="topic-line">
+			<span>{{ $home.topics_label | default "Explore a few topics" }}</span>
+			{{ range ($home.topics | default (slice)) }}
+				{{ with $.Site.GetPage (printf "/tags/%s" (. | urlize)) }}
+					<a href="{{ .RelPermalink }}">{{ .Title }} ↗</a>
+				{{ end }}
+			{{ end }}
+		</div>
+	</section>
+	<section class="about-strip">
+		<div class="wrap">
+			{{ with $home.highlights }}
+				<div class="section-heading"><div><p class="eyebrow">{{ $home.highlights_eyebrow | default "Beyond the blog" }}</p><h2>{{ $home.highlights_title | default "A few ways I show up" }}<span>.</span></h2></div></div>
+				<div class="avenues">
+					{{ range . }}
+						<a class="avenue" href="{{ .url | relURL }}">
+							<span class="avenue-top">{{ .eyebrow }} <span aria-hidden="true">↗</span></span>
+							<h3>{{ range $index, $line := .title_lines }}{{ if $index }}<br>{{ end }}{{ $line }}{{ end }}</h3>
+							<p>{{ .description }}</p>
+							<span class="text-link">{{ .link_text }} →</span>
+						</a>
+					{{ end }}
+				</div>
+			{{ end }}
+		</div>
+	</section>
+	<section class="connect-section">
+		<div class="wrap connect-inner">
+			<div>
+				<p class="eyebrow">{{ $home.cta_eyebrow | default "Keep the conversation going" }}</p>
+				<h2>{{ $home.cta_title | default "Good things start with a hello." }}</h2>
+				<p>{{ $home.cta_text | default "Questions, ideas, or a shared curiosity. I'd love to connect." }}</p>
+			</div>
+			{{ with $home.cta_url }}<a class="button button-light" href="{{ . }}">{{ $home.cta_link_text | default "Get in touch" }} <span aria-hidden="true">↗</span></a>{{ end }}
+		</div>
+	</section>
+{{ end }}
+{{ end }}

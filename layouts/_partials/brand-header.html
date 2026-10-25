@@ -1,0 +1,13 @@
+<header class="site-header wrap">
+	<a class="wordmark" href="{{ "/" | relURL }}" aria-label="{{ .Site.Title }} — home">{{ .Site.Params.brand.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></a>
+	<nav aria-label="Main navigation">
+		<ul class="nav-list">
+			{{ range .Site.Menus.main }}
+				<li>
+					<a href="{{ .URL | relURL }}"{{ if or ($.IsMenuCurrent "main" .) (and (eq .Identifier "blog") (eq $.Section "blog")) }} aria-current="page"{{ end }}>{{ .Name }}</a>
+				</li>
+			{{ end }}
+		</ul>
+	</nav>
+	{{ with .Site.Params.brand.connect_url }}<a class="header-connect" href="{{ . }}">{{ $.Site.Params.brand.connect_text | default "Let's connect" }} <span aria-hidden="true">↗</span></a>{{ end }}
+</header>

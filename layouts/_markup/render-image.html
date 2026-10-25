@@ -1,0 +1,18 @@
+{{- $image := .Page.Resources.GetMatch .Destination -}}
+{{- if $image -}}
+  {{- $processed := $image -}}
+  {{- if or (eq $image.MediaType.SubType "jpeg") (eq $image.MediaType.SubType "png") -}}
+    {{- $quality := 80 -}}
+    {{- if eq $image.MediaType.SubType "png" -}}
+      {{- $quality = 90 -}}
+    {{- end -}}
+    {{- $spec := printf "webp q%d" $quality -}}
+    {{- if gt $image.Width 1600 -}}
+      {{- $spec = printf "resize 1600x %s" $spec -}}
+    {{- end -}}
+    {{- $processed = $image.Process $spec -}}
+  {{- end -}}
+  <img src="{{ $processed.RelPermalink }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+{{- else -}}
+  <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+{{- end -}}

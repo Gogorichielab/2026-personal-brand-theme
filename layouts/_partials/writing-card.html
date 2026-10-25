@@ -1,0 +1,19 @@
+<article class="writing-card">
+	<div class="post-meta">
+		{{ if eq .Kind "term" }}
+			{{ $postCount := len (where .Pages "Section" "blog") }}
+			<span>{{ $postCount }} {{ if eq $postCount 1 }}blog post{{ else }}blog posts{{ end }}</span>
+		{{ else }}
+			<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+			<span>{{ .ReadingTime }} min read</span>
+		{{ end }}
+	</div>
+	{{ with .GetTerms "tags" }}
+		<span class="card-topic">{{ (index . 0).LinkTitle }}</span>
+	{{ end }}
+	<h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+	<p>{{ .Summary | plainify | htmlUnescape | truncate 150 }}</p>
+	<a class="read-link" href="{{ .RelPermalink }}" aria-label="Read {{ .Title }}">
+		Read the story <span aria-hidden="true">↗</span>
+	</a>
+</article>
