@@ -12,6 +12,8 @@ enableRobotsTXT = true
 [Params.author]
   name = "Example Person"
   location = "Somewhere"
+  image = "images/portrait.svg"
+  image_alt = "Illustrated placeholder portrait"
   bio = "A short biography about the person behind this site."
 
 [Params.brand]
@@ -19,6 +21,8 @@ enableRobotsTXT = true
   mark = "."
   connect_url = "https://example.org/contact/"
   connect_text = "Let's connect"
+  about_url = "about/"
+  github_url = "https://github.com/example"
   footer_tagline = "Always learning and sharing."
 
 [Params.home]
@@ -26,8 +30,30 @@ enableRobotsTXT = true
   headline_accent = "Community."
   intro = ["A personal site about the work, ideas, and people that matter to me.", "Follow along as I learn, build, and share what I discover."]
   areas = ["Ideas", "Projects", "Community"]
-  topics = ["Notes"]
+  portrait_caption = "Usually found near a whiteboard"
+  topics = ["Notes", "Hugo", "Accessibility"]
   cta_url = "https://example.org/contact/"
+
+[[Params.home.highlights]]
+  eyebrow = "01 / Build"
+  title_lines = ["Ideas into", "working things."]
+  description = "Side projects, small tools, and experiments that started with a question."
+  url = "projects/"
+  link_text = "Explore projects"
+
+[[Params.home.highlights]]
+  eyebrow = "02 / Share"
+  title_lines = ["Talks, podcasts,", "and conversations."]
+  description = "Conference sessions and podcast appearances about building on the web."
+  url = "speaking/"
+  link_text = "See speaking"
+
+[[Params.home.highlights]]
+  eyebrow = "03 / Write"
+  title_lines = ["Notes from", "the journey."]
+  description = "Longer thoughts on craft, accessibility, and learning in public."
+  url = "blog/"
+  link_text = "Read the blog"
 
 [Params.search]
   enabled = true
@@ -35,6 +61,10 @@ enableRobotsTXT = true
 [[Params.social]]
   name = "GitHub"
   url = "https://github.com/example"
+
+[[Params.social]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/in/example"
 
 [outputFormats.Search]
   mediaType = "application/json"
@@ -52,3 +82,13 @@ enableRobotsTXT = true
   identifier = "blog"
   weight = 2
   url = "/blog/"
+[[menu.main]]
+  name = "Projects"
+  identifier = "projects"
+  weight = 3
+  url = "/projects/"
+[[menu.main]]
+  name = "Speaking"
+  identifier = "speaking"
+  weight = 4
+  url = "/speaking/"
