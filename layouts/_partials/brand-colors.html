@@ -1,0 +1,30 @@
+{{- /* Returns a CSS resource with the palette: preset values, then params.colors overrides.
+  Presets live here rather than in data/: .Site.Data is deprecated from Hugo 0.156 and hugo.Data doesn't exist in 0.146. */ -}}
+{{- $presets := dict
+  "navy" (dict
+    "ink" "#102b4c" "muted" "#4a6179" "accent" "#2d6089" "sky" "#b5d9f3" "pale" "#e5f1fa" "paper" "#f8fbfe" "line" "#c5d7e6"
+    "focus" "#4075a2" "band" "#d0e5f5" "frame" "#8eacc4" "frame_border" "#7298b6" "stage" "#dceaf5" "rule" "#a5bed2")
+  "forest" (dict
+    "ink" "#173a2c" "muted" "#46604f" "accent" "#2c6a4c" "sky" "#b8e0c8" "pale" "#e6f3eb" "paper" "#f8fcf9" "line" "#c6dccf"
+    "focus" "#3a7a5a" "band" "#d1eadb" "frame" "#91b9a2" "frame_border" "#74a088" "stage" "#ddefe4" "rule" "#a7c7b4")
+-}}
+{{- $config := site.Params.colors | default dict -}}
+{{- $name := $config.preset | default "navy" -}}
+{{- $palette := index $presets $name -}}
+{{- if not $palette -}}
+  {{- errorf "params.colors.preset: unknown preset %q. Use one of: navy, forest." $name -}}
+{{- end -}}
+{{- range $key, $_ := $config -}}
+  {{- if and (ne $key "preset") (not (isset $palette $key)) -}}
+    {{- errorf "params.colors.%s: unknown color. Supported colors are listed in the theme README." $key -}}
+  {{- end -}}
+{{- end -}}
+{{- $css := "" -}}
+{{- range $key, $preset := $palette -}}
+  {{- $value := string (index $config $key | default $preset) -}}
+  {{- if not (findRE `^#(?:[0-9a-fA-F]{3}){1,2}$` $value) -}}
+    {{- errorf "params.colors.%s: %q is not a hex color such as #2d6089." $key $value -}}
+  {{- end -}}
+  {{- $css = printf "%s--%s:%s;" $css (replace $key "_" "-") $value -}}
+{{- end -}}
+{{- return resources.FromString "css/colors.css" (printf ":root{%s}" $css) -}}
