@@ -38,16 +38,27 @@
 <meta property="og:type" content="{{ if and .IsPage (eq .Section "blog") }}article{{ else }}website{{ end }}">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $description }}">
-{{- $images := .Params.images | default .Site.Params.images -}}
+{{- /* Alt text travels with its image: a page image uses the page's image_alt, the site default the site's. */ -}}
+{{- $images := .Params.images -}}
+{{- $imageAlt := .Params.image_alt -}}
+{{- if not $images -}}
+  {{- $images = .Site.Params.images -}}
+  {{- $imageAlt = .Site.Params.image_alt -}}
+{{- end -}}
 {{- with $images -}}
   {{- $image := index . 0 -}}
   {{- with $.Resources.GetMatch $image -}}
     {{- $image = .Permalink -}}
   {{- else -}}
-    {{- $image = $image | absURL -}}
+    {{- /* A leading slash would make absURL drop a subpath baseURL. */ -}}
+    {{- $image = strings.TrimPrefix "/" $image | absURL -}}
   {{- end }}
 <meta property="og:image" content="{{ $image }}">
 <meta name="twitter:image" content="{{ $image }}">
+{{- with $imageAlt }}
+<meta property="og:image:alt" content="{{ . }}">
+<meta name="twitter:image:alt" content="{{ . }}">
+{{- end }}
 <meta name="twitter:card" content="summary_large_image">
 {{- else }}
 <meta name="twitter:card" content="summary">
