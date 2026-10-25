@@ -65,6 +65,24 @@ Homepage highlights are optional repeatable entries:
 	link_text = "Explore projects"
 ```
 
+## Page Headings
+
+Section and page headings have defaults you can replace in each page's front matter:
+
+| Page | Front matter keys |
+| --- | --- |
+| Blog and other lists (`content/blog/_index.md`, …) | `eyebrow`, `heading` |
+| Projects (`content/projects/_index.md`) | `eyebrow`, `heading`, `list_heading`, `github_text` |
+| Speaking (`content/speaking/index.md`) | `eyebrow`, `invite_text`, `profile_text` |
+
+```yaml
+---
+title: "Blog"
+eyebrow: "Writing"
+heading: "Notes and essays"
+---
+```
+
 ## Blog Search
 
 Search is opt-in. To enable it, add `enabled = true` under `[params.search]`, configure a `Search` output format, and add `Search` to the outputs for your blog section:

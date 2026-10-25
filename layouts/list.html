@@ -1,7 +1,7 @@
 {{ define "main" }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">{{ if eq .Section "blog" }}The blog{{ else }}Explore the archive{{ end }}</p>
-		<h1>{{ if eq .Section "blog" }}Ramblings, with a purpose{{ else }}{{ .Title }}{{ end }}<span>.</span></h1>
+		<p class="eyebrow">{{ .Params.eyebrow | default (cond (eq .Section "blog") "The blog" "Explore the archive") }}</p>
+		<h1>{{ .Params.heading | default (cond (eq .Section "blog") "Ramblings, with a purpose" .Title) }}<span>.</span></h1>
 		<div class="intro-copy">{{ .Content }}</div>
 	</section>
 	<section class="wrap archive section-tight">

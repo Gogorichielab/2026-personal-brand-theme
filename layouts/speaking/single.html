@@ -1,7 +1,7 @@
 {{ define "main" }}
 <section class="speaking-layout wrap" aria-labelledby="speaking-title">
   <div class="speaking-lead">
-    <p class="eyebrow">Speaking</p>
+    <p class="eyebrow">{{ .Params.eyebrow | default "Speaking" }}</p>
     <h1 id="speaking-title">
       {{ range $index, $line := .Params.headline_lines }}
         {{ if $index }}<br>{{ end }}{{ $line }}
@@ -16,12 +16,12 @@
     <div class="speaking-actions">
       {{ with .Params.invite_url }}
         <a class="button" href="{{ . }}">
-          Invite me to speak
+          {{ $.Params.invite_text | default "Invite me to speak" }}
         </a>
       {{ end }}
       {{ with .Params.profile_url }}
         <a class="button speaking-profile" href="{{ . }}">
-          Sessionize profile <span aria-hidden="true">↗</span>
+          {{ $.Params.profile_text | default "Sessionize profile" }} <span aria-hidden="true">↗</span>
         </a>
       {{ end }}
     </div>
