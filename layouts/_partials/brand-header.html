@@ -1,5 +1,5 @@
 <header class="site-header wrap">
-	<a class="wordmark" href="{{ "/" | relURL }}" aria-label="{{ .Site.Title }} — home">{{ .Site.Params.brand.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></a>
+	<a class="wordmark" href="{{ site.Home.RelPermalink }}" aria-label="{{ .Site.Title }} — home">{{ .Site.Params.brand.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></a>
 	<nav aria-label="Main navigation">
 		<ul class="nav-list">
 			{{ range .Site.Menus.main }}
