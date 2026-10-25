@@ -15,6 +15,18 @@ A Hugo theme: simple, clean, personal-brand first, content second. See `README.m
 - No Node: don't add `package.json` or npm dependencies. Use Hugo Pipes for any asset processing.
 - Follow standard Hugo theme layout (`layouts/`, `assets/`, `static/`, `archetypes/`, `i18n/`, `theme.toml`) as it gets added.
 
+## Pull requests
+
+When you open a pull request, label it with the agent that created it:
+
+| Created by | Label |
+| --- | --- |
+| Claude (Claude Code) | `Claude` |
+| ChatGPT / OpenAI (e.g. Codex) | `OpenAI` |
+| GitHub Copilot | `GitHub Copilot` |
+
+Use the existing label exactly as named; don't create variants.
+
 ## Checking your work
 
 - If an `exampleSite/` exists, build it with `hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme` and fix any errors or warnings.
