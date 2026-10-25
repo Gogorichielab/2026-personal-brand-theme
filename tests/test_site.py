@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -23,6 +24,7 @@ class Page(HTMLParser):
         self.title = ""
         self.in_title = False
         self.h1_count = 0
+        self.images = []
         self.in_card = False
         self.card_urls = []
         self.feed(path.read_text())
@@ -41,6 +43,8 @@ class Page(HTMLParser):
             self.links.append(attrs["href"])
             if self.in_card:
                 self.card_urls.append(attrs["href"])
+        if tag == "img":
+            self.images.append(attrs)
         if tag == "title":
             self.in_title = True
         if tag == "h1":
@@ -61,6 +65,18 @@ class Page(HTMLParser):
         assert len(values) == 1, (name, values)
         return values[0]
 
+
+def tiny_png(width, height):
+    """A solid-color RGB PNG, so tests need no image library."""
+    import struct
+    import zlib
+
+    def chunk(tag, data):
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data))
+
+    rows = (b"\x00" + b"\x2d\x60\x89" * width) * height
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b""))
 
 class SiteTests(unittest.TestCase):
     @classmethod
@@ -90,6 +106,18 @@ class SiteTests(unittest.TestCase):
         (source / "content" / "remote-image.md").write_text(
             '---\ntitle: "Remote image"\n'
             'images: ["https://example.net/social.png"]\n---\n'
+        )
+        # A draft sharing first-post's tag must never be recommended.
+        (source / "content" / "blog" / "draft-note.md").write_text(
+            '---\ntitle: "Draft note"\ndate: 2026-10-01\ndraft: true\ntags: ["notes"]\n---\nDraft.\n'
+        )
+        # A bundled image narrower than every candidate width, and an external one.
+        small = source / "content" / "image-check"
+        small.mkdir()
+        (small / "small.png").write_bytes(tiny_png(300, 100))
+        (small / "index.md").write_text(
+            '---\ntitle: "Image check"\n---\n\n![Small](small.png)\n\n'
+            '![External](https://example.net/photo.jpg)\n'
         )
         cls.source, cls.work = source, work
         cls.sites = []
@@ -285,6 +313,54 @@ class SiteTests(unittest.TestCase):
     def stylesheet(output):
         (css,) = (output / "css").glob("personal*.css")
         return css.read_text()
+
+    @staticmethod
+    def related(output, slug):
+        page = (output / "blog" / slug / "index.html").read_text()
+        if 'id="related-title"' not in page and "id=related-title" not in page:
+            return None
+        section = page.split("related-title", 1)[1].split("</section>", 1)[0]
+        return re.findall(r'<h3><a href="?([^" >]+)', section)
+
+    def test_related_articles(self):
+        lists = []
+        for output, base, prefix in self.sites:
+            with self.subTest(base=base):
+                links = self.related(output, "first-post")
+                self.assertTrue(links)
+                self.assertLessEqual(len(links), 3)
+                self.assertEqual(len(links), len(set(links)))
+                self.assertNotIn(prefix + "blog/first-post/", links)
+                self.assertTrue(all(link.startswith(prefix + "blog/") for link in links))
+                self.assertFalse(any("draft-note" in link for link in links))
+                # A post sharing no tags gets no section, and older/newer links stay.
+                self.assertIsNone(self.related(output, "podcast-guest"))
+                self.assertIn("article-neighbors", (output / "blog/podcast-guest/index.html").read_text())
+                lists.append([link.removeprefix(prefix) for link in links])
+        # Two separate builds of the same content recommend the same posts in the same order.
+        self.assertEqual(lists[0], lists[1])
+
+    def test_related_articles_can_be_disabled(self):
+        result, output = self.build("no-related", "[params.related]\nenabled = false\n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIsNone(self.related(output, "first-post"))
+
+    def test_responsive_article_images(self):
+        for output, base, prefix in self.sites:
+            with self.subTest(base=base):
+                (cover,) = Page(output / "blog/building-this-theme/index.html").images[:1]
+                widths = [int(c.split()[1].rstrip("w")) for c in cover["srcset"].split(", ")]
+                self.assertEqual(widths, [480, 800, 1200])  # source is 1200px wide
+                self.assertIn("sizes", cover)
+                self.assertTrue(cover["src"].startswith(prefix) and cover["src"].endswith(".webp"))
+                self.assertEqual((cover["width"], cover["height"]), ("1200", "630"))
+                self.assertEqual((cover["loading"], cover["decoding"]), ("lazy", "async"))
+                self.assertTrue(cover["alt"])
+                small, external = Page(output / "image-check/index.html").images[:2]
+                self.assertNotIn("srcset", small)  # no candidate may exceed the 300px source
+                self.assertEqual(small["width"], "300")
+                self.assertEqual(external["src"], "https://example.net/photo.jpg")
+                self.assertNotIn("srcset", external)
 
     def test_default_brand_colors(self):
         for output, _, _ in self.sites:

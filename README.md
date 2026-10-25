@@ -141,6 +141,38 @@ Search is opt-in. To enable it, add `enabled = true` under `[params.search]`, co
 outputs: ["HTML", "RSS", "Search"]
 ```
 
+## Related Articles
+
+Blog posts can end with a short list of related articles. It is off by default:
+
+```toml
+[params.related]
+  enabled = true
+  limit = 3                     # default 3
+  heading = "Related articles"  # optional
+```
+
+The theme uses Hugo's [related content](https://gohugo.io/content-management/related/) and lists only blog posts, never the current post. Drafts and future posts are left out unless your build includes them. When nothing matches, the section isn't shown. Hugo decides relevance from your site's `[related]` settings; Hugo's defaults only suggest older posts. The example site makes shared tags decide relevance and lets newer posts appear:
+
+```toml
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "date"
+    weight = 10
+```
+
+Results are ordered by relevance and are the same on every build of the same content.
+
+## Article Images
+
+JPEG and PNG images stored next to a post (in its page bundle) are converted to WebP, capped at 1600px wide, and offered in 480, 800 and 1200px versions (never wider than the original) with `srcset` and `sizes`, so phones download a smaller file. Other formats and external image URLs are used as they are.
+
 ## Contact Links
 
 Set `params.brand.connect_url` and `params.home.cta_url` to a relative page path such as `contact/`, a full HTTPS URL, or a `mailto:` link. The speaking page's `invite_url` and `profile_url` accept the same formats. Relative paths respect your site's `baseURL`, including a GitHub Pages subpath.
