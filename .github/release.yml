@@ -1,0 +1,24 @@
+# Categories use pull request labels; unlabelled PRs remain in Other changes.
+changelog:
+  categories:
+    - title: Breaking changes
+      labels:
+        - breaking-change
+    - title: Features and enhancements
+      labels:
+        - enhancement
+    - title: Bug fixes
+      labels:
+        - bug
+    - title: Performance improvements
+      labels:
+        - performance
+    - title: Documentation
+      labels:
+        - documentation
+    - title: Dependencies and maintenance
+      labels:
+        - dependencies
+    - title: Other changes
+      labels:
+        - "*"
