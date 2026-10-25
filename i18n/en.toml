@@ -40,6 +40,13 @@ more_articles = "More articles"
 older_story = "Older story"
 newer_story = "Newer story"
 related_heading = "Related articles"
+series_aria = "Series: {{ .Series }}"
+series_position = "Part {{ .Number }} of {{ .Total }}"
+series_all_parts = "All parts"
+series_parts_aria = "More in {{ .Series }}"
+series_previous = "Previous part"
+series_next = "Next part"
+series_eyebrow = "A series"
 
 # Search (the {count} placeholder is filled in by the browser)
 search_label = "Find something interesting"

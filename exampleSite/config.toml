@@ -7,6 +7,12 @@ defaultContentLanguage = "en"
 [pagination]
   pagerSize = 6
 
+# Declaring taxonomies replaces Hugo's defaults, so keep tags and categories.
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
 [Params]
   description = "Explore small web projects, practical notes on accessibility, and lessons from building in public. A demo of the 2026 Personal Brand Hugo theme."
 

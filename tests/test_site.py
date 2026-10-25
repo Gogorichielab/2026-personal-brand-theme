@@ -123,6 +123,15 @@ class SiteTests(unittest.TestCase):
             '---\ntitle: "Image check"\n---\n\n![Small](small.png)\n\n'
             '![External](https://example.net/photo.jpg)\n'
         )
+        # A series outside the blog whose part numbers disagree with the dates, plus a draft part.
+        guides = source / "content" / "guides"
+        guides.mkdir()
+        for slug, date, weight, extra in (("c", "2025-03-01", 1, ""), ("a", "2025-01-01", 3, ""),
+                                          ("b", "2025-02-01", 2, ""), ("draft", "2025-04-01", 4, "draft: true\n")):
+            (guides / f"series-{slug}.md").write_text(
+                f'---\ntitle: "Part {slug}"\ndate: {date}\nseries: ["Test Series"]\n'
+                f'series_weight: {weight}\n{extra}---\nBody.\n'
+            )
         cls.source, cls.work = source, work
         cls.sites = []
         for name, prefix in (("root", "/"), ("subpath", "/theme-demo/")):
@@ -397,6 +406,39 @@ class SiteTests(unittest.TestCase):
         result, _ = self.build("bad-share", '[params.share]\ndestinations = ["myspace"]\n')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("params.share.destinations", result.stderr)
+
+    def test_series(self):
+        for output, base, prefix in self.sites:
+            with self.subTest(base=base):
+                term = (output / "series/test-series/index.html").read_text()
+                url = lambda slug: prefix + f"guides/series-{slug}/"
+                # Part order wins over dates, and the draft part stays out.
+                self.assertEqual(re.findall(r'<h3><a href="?([^" >]+)', term), [url("c"), url("b"), url("a")])
+                self.assertFalse((output / "guides/series-draft").exists())
+                for slug, position, prev, nxt in (("c", 1, None, "b"), ("b", 2, "c", "a"), ("a", 3, "b", None)):
+                    page = (output / f"guides/series-{slug}/index.html").read_text()
+                    self.assertIn(f"Part {position} of 3", page)
+                    self.assertRegex(page, rf'href="?{re.escape(url(slug))}"? aria-current="?page')
+                    found = lambda label: (re.findall(rf'href="?([^" >]+)"?><small>{label}', page) or [None])[0]
+                    self.assertEqual(found("← Previous part"), prev and url(prev))
+                    self.assertEqual(found("Next part →"), nxt and url(nxt))
+                plain = (output / "blog/first-post/index.html").read_text()
+                self.assertNotIn("series-box", plain)
+                self.assertNotIn("Previous part", plain)
+        for name, front_matter, message in (
+            ("missing", 'series: ["Test Series"]', "needs a series_weight"),
+            ("repeated", 'series: ["Test Series"]\nseries_weight: 2', "both have series_weight 2"),
+            ("two-series", 'series: ["Test Series", "Other"]\nseries_weight: 9', "can belong to one series"),
+        ):
+            with self.subTest(name=name):
+                bad = self.source / "content" / "guides" / "series-bad.md"
+                bad.write_text(f'---\ntitle: "Bad"\n{front_matter}\n---\nBody.\n')
+                try:
+                    result, _ = self.build(f"series-{name}", "")
+                finally:
+                    bad.unlink()
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
 
     @staticmethod
     def switcher(page):

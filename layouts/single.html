@@ -1,4 +1,19 @@
 {{ define "main" }}
+	{{ $series := dict }}
+	{{ with .GetTerms "series" }}
+		{{ if gt (len .) 1 }}{{ errorf "%s: a post can belong to one series, but it lists %d" $.File.Path (len .) }}{{ end }}
+		{{ $term := index . 0 }}
+		{{ $parts := partialCached "series-parts.html" $term $term.RelPermalink }}
+		{{ $prev := false }}
+		{{ range $i, $p := $parts }}
+			{{ if eq $p.RelPermalink $.RelPermalink }}
+				{{ $next := false }}
+				{{ with after (add $i 1) $parts }}{{ $next = index . 0 }}{{ end }}
+				{{ $series = dict "term" $term "n" (add $i 1) "total" (len $parts) "parts" $parts "prev" $prev "next" $next }}
+			{{ end }}
+			{{ $prev = $p }}
+		{{ end }}
+	{{ end }}
 	<article class="article wrap">
 		<header class="article-header">
 			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relLangURL }}{{ else }}{{ site.Home.RelPermalink }}{{ end }}">
@@ -11,6 +26,19 @@
 					<time datetime="{{ .Date.Format "2006-01-02" }}">{{ time.Format ":date_long" .Date }}</time>
 					<span>{{ T "min_read" (dict "Count" .ReadingTime) }}</span>
 				</div>
+			{{ end }}
+			{{ with $series }}
+				<nav class="series-box" aria-label="{{ T "series_aria" (dict "Series" .term.LinkTitle) }}">
+					<p><strong>{{ T "series_position" (dict "Number" .n "Total" .total) }}</strong> · <a href="{{ .term.RelPermalink }}">{{ .term.LinkTitle }}</a></p>
+					<details>
+						<summary>{{ T "series_all_parts" }}</summary>
+						<ol>
+							{{ range .parts }}
+								<li><a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a></li>
+							{{ end }}
+						</ol>
+					</details>
+				</nav>
 			{{ end }}
 			{{ with .Params.lead }}
 				<p class="large-copy">{{ . }}</p>
@@ -26,6 +54,18 @@
 				{{ end }}
 			{{ end }}
 			{{ .Content }}
+			{{ with $series }}
+				{{ if or .prev .next }}
+					<nav class="article-neighbors" aria-label="{{ T "series_parts_aria" (dict "Series" .term.LinkTitle) }}">
+						{{ with .prev }}
+							<a href="{{ .RelPermalink }}"><small>← {{ T "series_previous" }}</small>{{ .Title }}</a>
+						{{ end }}
+						{{ with .next }}
+							<a href="{{ .RelPermalink }}"><small>{{ T "series_next" }} →</small>{{ .Title }}</a>
+						{{ end }}
+					</nav>
+				{{ end }}
+			{{ end }}
 			{{ if eq .Section "blog" }}
 				<div class="article-tags">
 					{{ range .GetTerms "tags" }}

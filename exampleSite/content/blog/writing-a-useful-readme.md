@@ -2,6 +2,8 @@
 title: "Writing a Useful README"
 date: 2026-05-15T09:00:00-05:00
 tags: ["project","writing"]
+series: ["From Idea to README"]
+series_weight: 3
 lead: "Help the next person get from curiosity to a working first step."
 ---
 

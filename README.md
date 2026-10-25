@@ -37,7 +37,7 @@
 [![Dark mode](https://img.shields.io/badge/Dark_mode-automatic-2D6089)](#brand-colors)
 [![Structured data](https://img.shields.io/badge/JSON--LD-BlogPosting-2D6089)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/layouts/_partials/seo-schema.html)
 
-A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, copy buttons on code, share links, and translations with a language switcher.
+A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, article series, copy buttons on code, share links, and translations with a language switcher.
 
 ![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
 
@@ -171,6 +171,31 @@ The theme uses Hugo's [related content](https://gohugo.io/content-management/rel
 
 Results are ordered by relevance and are the same on every build of the same content.
 
+## Article Series
+
+Group posts into an ordered series. Add a `series` taxonomy to your site configuration. Declaring taxonomies replaces Hugo's defaults, so keep `tags` and `categories`:
+
+```toml
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+```
+
+Then give each part the series name and its place in it:
+
+```yaml
+---
+title: "Building a Tiny Reading List"
+series: ["From Idea to README"]
+series_weight: 2
+---
+```
+
+Each part shows "Part 2 of 3" and a link to the series under its title, with a collapsible list of all parts. Previous and next part links follow the article. The series page (`/series/from-idea-to-readme/`) lists the parts in order. Drafts and future posts are left out unless your build includes them, and the numbering counts only published parts. Posts without a series are unchanged.
+
+A post can belong to one series. Number the parts 1, 2, 3, and so on. A missing or repeated `series_weight`, or a post listing two series, stops the build with a message naming the posts.
+
 ## Copy Buttons on Code
 
 Add a **Copy code** button above every code block in your posts:
@@ -275,7 +300,7 @@ All three built-in presets meet WCAG AA contrast for body text. Custom colors ar
 
 ## Validation
 
-Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, responsive images, copy buttons, share links, translations and brand colors.
+Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, series, responsive images, copy buttons, share links, translations and brand colors.
 
 See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 
