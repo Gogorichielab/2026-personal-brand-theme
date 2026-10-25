@@ -178,7 +178,42 @@ Add a **Copy code** button above every code block in your posts:
   enabled = true
 ```
 
-The button copies the code exactly, without line numbers, and confirms with "Copied". Screen readers hear the same confirmation, and focus stays on the button. If the browser blocks clipboard access, the button says "Copy failed" and the code can still be selected by hand. The small script loads only on pages that contain code. Without JavaScript, no button appears.
+The button copies the code exactly, without line numbers, and confirms with "Copied". Screen readers hear the same confirmation, and focus stays on the button. If the browser blocks clipboard access, the button says "Copy failed" and the code can still be selected by hand. The small script loads only on pages that contain code, or on posts with sharing turned on. Without JavaScript, no button appears.
+
+## Sharing
+
+Add a share row to blog posts:
+
+```toml
+[params.share]
+  enabled = true
+  destinations = ["linkedin", "bluesky", "email"]  # any of: linkedin, bluesky, x, email
+```
+
+Each destination is a plain link with the post's title and canonical URL encoded into it. No third-party scripts are loaded and nothing is tracked. Only the destinations you list appear, and an unknown name stops the build. A **Copy link** button copies the post's canonical URL. If the browser blocks clipboard access, the link is shown so it can be copied by hand. Without JavaScript, the copy button doesn't appear, but the share links still work.
+
+## Translations
+
+All text the theme writes itself (labels, buttons, search messages, dates and screen-reader text) comes from translation files. The theme ships English (`i18n/en.toml`) and Spanish (`i18n/es.toml`). To add a language, copy `i18n/en.toml` to `i18n/<code>.toml` in your site and translate the values. Dates follow each language's conventions automatically.
+
+A key missing from a language falls back to your site's default language. If your default language has no translation file, copy `en.toml` for it, or its labels will be empty.
+
+On a multilingual site, the header shows a language switcher. It links to the translated version of the current page, or to that language's homepage when there isn't one. Single-language sites don't show it. Give each language a `language_label` param for the switcher, otherwise the language code is shown:
+
+```toml
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    language_label = "English"
+[languages.es]
+  weight = 2
+  [languages.es.params]
+    language_label = "Español"
+    [languages.es.params.home]
+      headline = ["Pequeñas herramientas.", "Notas útiles."]
+```
+
+Text you write in params and front matter, such as homepage headlines or button labels, is translated per language as shown above. Settings you don't override are shared. Links to the blog and the About page follow the current language. Other links you set in params are used as written.
 
 ## Article Images
 
