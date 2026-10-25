@@ -63,6 +63,22 @@ enableRobotsTXT = true
 [Params.search]
   enabled = true
 
+[Params.related]
+  enabled = true
+  limit = 3
+
+# Related articles: shared tags decide relevance; the date only breaks near-ties.
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "date"
+    weight = 10
+
 [[Params.social]]
   name = "GitHub"
   url = "https://github.com/example"

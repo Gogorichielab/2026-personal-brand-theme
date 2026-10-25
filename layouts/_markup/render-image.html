@@ -1,6 +1,7 @@
 {{- $image := .Page.Resources.GetMatch .Destination -}}
 {{- if $image -}}
   {{- $processed := $image -}}
+  {{- $srcset := slice -}}
   {{- if or (eq $image.MediaType.SubType "jpeg") (eq $image.MediaType.SubType "png") -}}
     {{- $quality := 80 -}}
     {{- if eq $image.MediaType.SubType "png" -}}
@@ -11,8 +12,19 @@
       {{- $spec = printf "resize 1600x %s" $spec -}}
     {{- end -}}
     {{- $processed = $image.Process $spec -}}
+    {{- /* Smaller WebP candidates, never wider than the full-size version. */ -}}
+    {{- range slice 480 800 1200 -}}
+      {{- if lt . $processed.Width -}}
+        {{- $variant := $image.Process (printf "resize %dx webp q%d" . $quality) -}}
+        {{- $srcset = $srcset | append (printf "%s %dw" $variant.RelPermalink $variant.Width) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- with $srcset -}}
+      {{- $srcset = . | append (printf "%s %dw" $processed.RelPermalink $processed.Width) -}}
+    {{- end -}}
   {{- end -}}
-  <img src="{{ $processed.RelPermalink }}" width="{{ $processed.Width }}" height="{{ $processed.Height }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+  {{- /* sizes follows the article column: full width on small screens, 740px at most. */ -}}
+  <img src="{{ $processed.RelPermalink }}"{{ with $srcset }} srcset="{{ delimit . ", " }}" sizes="(max-width: 800px) 100vw, 740px"{{ end }} width="{{ $processed.Width }}" height="{{ $processed.Height }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
 {{- else -}}
   <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
 {{- end -}}

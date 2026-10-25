@@ -55,4 +55,18 @@
 			{{ end }}
 		</div>
 	</article>
+	{{ if and (eq .Section "blog") site.Params.related.enabled }}
+		{{ with first (site.Params.related.limit | default 3) (where (site.RegularPages.Related .) "Section" "blog") }}
+			<section class="wrap section-tight" aria-labelledby="related-title">
+				<div class="section-heading">
+					<h2 id="related-title">{{ site.Params.related.heading | default "Related articles" }}<span>.</span></h2>
+				</div>
+				<div class="archive-grid">
+					{{ range . }}
+						{{ partial "writing-card.html" . }}
+					{{ end }}
+				</div>
+			</section>
+		{{ end }}
+	{{ end }}
 {{ end }}
