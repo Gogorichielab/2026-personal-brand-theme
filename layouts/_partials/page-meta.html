@@ -1,0 +1,54 @@
+{{- $title := .Site.Title -}}
+{{- if not .IsHome -}}
+  {{- $title = printf "%s · %s" .Title .Site.Title -}}
+{{- end -}}
+{{- $description := .Description -}}
+{{- if not $description -}}
+  {{- if .IsHome -}}
+    {{- $description = .Site.Params.description -}}
+  {{- else if .Params.lead -}}
+    {{- $description = .Params.lead -}}
+  {{- else if .Content -}}
+    {{- $description = .Summary -}}
+  {{- else if eq .Kind "term" -}}
+    {{- $description = printf "Browse posts about %s on %s." .Title .Site.Title -}}
+  {{- else if eq .Kind "taxonomy" -}}
+    {{- $description = printf "Explore %s on %s." (.Title | lower) .Site.Title -}}
+  {{- else -}}
+    {{- $description = .Site.Params.description -}}
+  {{- end -}}
+{{- end -}}
+{{- $description = $description | default "" | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace | truncate 160 -}}
+{{- $canonical := .Permalink -}}
+{{- if in (slice "home" "section" "taxonomy" "term") .Kind -}}
+  {{- $paginator := partial "archive-paginator.html" . -}}
+  {{- if gt $paginator.PageNumber 1 -}}
+    {{- $title = printf "%s · Page %d" $title $paginator.PageNumber -}}
+    {{- $canonical = $paginator.URL | absURL -}}
+    {{- $description = printf "%s (Page %d)" $description $paginator.PageNumber -}}
+  {{- end -}}
+{{- end -}}
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $description }}">
+<link rel="canonical" href="{{ $canonical }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:type" content="{{ if and .IsPage (eq .Section "blog") }}article{{ else }}website{{ end }}">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $description }}">
+{{- $images := .Params.images | default .Site.Params.images -}}
+{{- with $images -}}
+  {{- $image := index . 0 -}}
+  {{- with $.Resources.GetMatch $image -}}
+    {{- $image = .Permalink -}}
+  {{- else -}}
+    {{- $image = $image | absURL -}}
+  {{- end }}
+<meta property="og:image" content="{{ $image }}">
+<meta name="twitter:image" content="{{ $image }}">
+<meta name="twitter:card" content="summary_large_image">
+{{- else }}
+<meta name="twitter:card" content="summary">
+{{- end }}

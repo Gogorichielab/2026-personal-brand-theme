@@ -102,6 +102,29 @@ Search is opt-in. To enable it, add `enabled = true` under `[params.search]`, co
 outputs: ["HTML", "RSS", "Search"]
 ```
 
+## Contact Links
+
+Set `params.brand.connect_url` and `params.home.cta_url` to a relative page path such as `contact/`, a full HTTPS URL, or a `mailto:` link. The speaking page's `invite_url` and `profile_url` accept the same formats. Relative paths respect your site's `baseURL`, including a GitHub Pages subpath.
+
+The example site includes a demo contact page. Replace its instructions with your own contact details before publishing; it does not send messages.
+
+## Search and Social Previews
+
+Give important pages a `description` in front matter. The theme uses it for the search description, Open Graph tags, and Twitter card tags. Without one, it uses a page's `lead`, then its content summary; the homepage uses `params.description`. Topic archives get descriptions based on their topic. Paginated archives have their own canonical URLs and page numbers in their titles.
+
+For a social preview image, set `images` to a list of image paths in front matter:
+
+```yaml
+description: "What readers will learn from this article."
+images: ["cover.png"]
+```
+
+An image in a page bundle is resolved from that bundle. Static images can use paths such as `images/social-card.png`, and absolute HTTPS image URLs are also supported. Set `params.images` in the site configuration for a default social image. Pages without an image use a summary card.
+
+## Validation
+
+Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, and search data.
+
 See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 
 ```sh

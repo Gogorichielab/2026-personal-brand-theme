@@ -9,5 +9,5 @@
 			{{ end }}
 		</ul>
 	</nav>
-	{{ with .Site.Params.brand.connect_url }}<a class="header-connect" href="{{ . }}">{{ $.Site.Params.brand.connect_text | default "Let's connect" }} <span aria-hidden="true">↗</span></a>{{ end }}
+	{{ with .Site.Params.brand.connect_url }}<a class="header-connect" href="{{ . | relURL }}">{{ $.Site.Params.brand.connect_text | default "Let's connect" }} <span aria-hidden="true">↗</span></a>{{ end }}
 </header>

@@ -1,0 +1,7 @@
+{{- $pages := .RegularPagesRecursive -}}
+{{- if .IsHome -}}
+  {{- $pages = where .Site.RegularPages "Section" "blog" -}}
+{{- else if eq .Kind "taxonomy" -}}
+  {{- $pages = .Pages -}}
+{{- end -}}
+{{- return (.Paginate $pages) -}}

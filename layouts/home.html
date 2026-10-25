@@ -4,7 +4,7 @@
 {{ $headline := $home.headline | default (slice "Curiosity." "Code.") }}
 {{ $headlineAccent := $home.headline_accent | default "Community." }}
 {{ $intro := $home.intro | default (slice "A personal site about the work, ideas, and people that matter to me." "Follow along as I learn, build, and share what I discover.") }}
-{{ $paginator := .Paginate (where .Site.RegularPages "Section" "blog") }}
+{{ $paginator := partial "archive-paginator.html" . }}
 {{ if gt $paginator.PageNumber 1 }}
 	<section class="page-intro wrap">
 		<p class="eyebrow">{{ $home.archive_eyebrow | default "From the archive" }}</p>
@@ -88,7 +88,7 @@
 				<h2>{{ $home.cta_title | default "Good things start with a hello." }}</h2>
 				<p>{{ $home.cta_text | default "Questions, ideas, or a shared curiosity. I'd love to connect." }}</p>
 			</div>
-			{{ with $home.cta_url }}<a class="button button-light" href="{{ . }}">{{ $home.cta_link_text | default "Get in touch" }} <span aria-hidden="true">↗</span></a>{{ end }}
+			{{ with $home.cta_url }}<a class="button button-light" href="{{ . | relURL }}">{{ $home.cta_link_text | default "Get in touch" }} <span aria-hidden="true">↗</span></a>{{ end }}
 		</div>
 	</section>
 {{ end }}

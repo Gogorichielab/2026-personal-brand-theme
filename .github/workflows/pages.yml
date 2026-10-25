@@ -44,6 +44,9 @@ jobs:
           hugo --source exampleSite --themesDir ../.. --gc --minify --panicOnWarning \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
 
+      - name: Test theme integration
+        run: python3 -m unittest discover -s tests -v
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:

@@ -16,11 +16,7 @@
 		<h2 class="sr-only">Articles</h2>
 		<div id="archive-default">
 			<div class="archive-grid">
-				{{ $pages := .RegularPagesRecursive }}
-				{{ if eq .Kind "taxonomy" }}
-					{{ $pages = .Pages }}
-				{{ end }}
-				{{ $paginator := .Paginate $pages }}
+				{{ $paginator := partial "archive-paginator.html" . }}
 				{{ range $paginator.Pages }}
 					{{ partial "writing-card.html" . }}
 				{{ end }}

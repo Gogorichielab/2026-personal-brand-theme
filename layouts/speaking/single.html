@@ -15,12 +15,12 @@
     </ul>
     <div class="speaking-actions">
       {{ with .Params.invite_url }}
-        <a class="button" href="{{ . }}">
+        <a class="button" href="{{ . | relURL }}">
           {{ $.Params.invite_text | default "Invite me to speak" }}
         </a>
       {{ end }}
       {{ with .Params.profile_url }}
-        <a class="button speaking-profile" href="{{ . }}">
+        <a class="button speaking-profile" href="{{ . | relURL }}">
           {{ $.Params.profile_text | default "Sessionize profile" }} <span aria-hidden="true">↗</span>
         </a>
       {{ end }}

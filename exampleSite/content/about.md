@@ -1,5 +1,6 @@
 ---
 title: "About"
+description: "Meet the example author, explore their interests in accessible websites and small tools, and find a starting point for your own about page."
 ---
 
 This page is an example of how the theme presents regular content.
@@ -14,4 +15,4 @@ I'm a placeholder person who likes building small things, writing about what I l
 
 ## Get in touch
 
-The best way to reach me is through the contact link at the top of the page.
+Have a project, a talk, or a question in mind? [Start a conversation](../contact/).
