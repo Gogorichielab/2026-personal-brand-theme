@@ -321,6 +321,10 @@ See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a li
 hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme --minify
 ```
 
+## Contributing
+
+Bug reports, fixes, documentation, translations, and testing are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get started.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
