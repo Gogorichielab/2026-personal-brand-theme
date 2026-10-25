@@ -64,9 +64,9 @@
 			{{ end }}
 		</div>
 	</section>
+	{{ with $home.highlights }}
 	<section class="about-strip">
 		<div class="wrap">
-			{{ with $home.highlights }}
 				<div class="section-heading"><div><p class="eyebrow">{{ $home.highlights_eyebrow | default (T "home_highlights_eyebrow") }}</p><h2>{{ $home.highlights_title | default (T "home_highlights_title") }}<span>.</span></h2></div></div>
 				<div class="avenues">
 					{{ range . }}
@@ -78,9 +78,9 @@
 						</a>
 					{{ end }}
 				</div>
-			{{ end }}
 		</div>
 	</section>
+	{{ end }}
 	<section class="connect-section">
 		<div class="wrap connect-inner">
 			<div>
