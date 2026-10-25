@@ -23,7 +23,7 @@
 [![Repository size](https://img.shields.io/github/repo-size/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
 
 [![Minimum Hugo Extended version](https://img.shields.io/badge/Hugo_Extended-%E2%89%A5_0.146.0-FF4088?logo=hugo&logoColor=white)](https://gohugo.io/installation/)
-[![Hugo version used in CI](https://img.shields.io/badge/Hugo_CI-0.152.2-FF4088?logo=hugo&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/.github/workflows/pages.yml)
+[![Hugo version used in CI](https://img.shields.io/badge/Hugo_CI-0.168.0-FF4088?logo=hugo&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/.github/workflows/pages.yml)
 [![HTML templates](https://img.shields.io/badge/Templates-HTML-E34F26?logo=html5&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/layouts)
 [![CSS styles](https://img.shields.io/badge/Styles-CSS-663399?logo=css&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/css)
 [![JavaScript search](https://img.shields.io/badge/Search-JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/js)
@@ -33,9 +33,11 @@
 [![Optional client-side search](https://img.shields.io/badge/Client--side_search-optional-2D6089)](#blog-search)
 [![RSS feed](https://img.shields.io/badge/Feed-RSS-FFA500?logo=rss&logoColor=white)](https://gogorichielab.github.io/2026-personal-brand-theme/blog/index.xml)
 [![Social previews](https://img.shields.io/badge/Social_previews-Open_Graph_%2B_Twitter-2D6089)](#search-and-social-previews)
+[![Translations](https://img.shields.io/badge/Translations-English_%2B_Spanish-2D6089)](#translations)
+[![Dark mode](https://img.shields.io/badge/Dark_mode-automatic-2D6089)](#brand-colors)
 [![Structured data](https://img.shields.io/badge/JSON--LD-BlogPosting-2D6089)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/layouts/_partials/seo-schema.html)
 
-A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout.
+A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout. Opt-in extras: brand color presets with automatic dark mode, related articles, copy buttons on code, share links, and translations with a language switcher.
 
 ![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
 
@@ -273,7 +275,7 @@ All three built-in presets meet WCAG AA contrast for body text. Custom colors ar
 
 ## Validation
 
-Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, and search data.
+Run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. The integration checks build the demo at both a domain root and a subpath, then check metadata, archive pagination, contact links, search data, related articles, responsive images, copy buttons, share links, translations and brand colors.
 
 See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 
