@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  # Build (but don't deploy) PRs so template errors are caught before merging.
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -11,9 +13,9 @@ permissions:
   pages: write
   id-token: write
 
-# One deployment at a time; let an in-progress deploy finish rather than cancel it.
+# One run per branch; let an in-progress deploy finish rather than cancel it.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +41,7 @@ jobs:
       # The repo checkout is the theme itself, so its parent directory is the themes dir.
       - name: Build exampleSite
         run: |
-          hugo --source exampleSite --themesDir ../.. --gc --minify \
+          hugo --source exampleSite --themesDir ../.. --gc --minify --panicOnWarning \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Upload artifact
@@ -48,6 +50,7 @@ jobs:
           path: exampleSite/public
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
