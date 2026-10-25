@@ -43,6 +43,8 @@ A responsive Hugo theme that puts a person and their work up front, with the blo
 
 - Hugo Extended 0.146.0 or later
 
+Every pull request builds and tests the theme on Hugo 0.146.0 and the four newest releases (0.165.0 through 0.168.0).
+
 ## Install
 
 Add the theme as a Git submodule:
