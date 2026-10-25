@@ -40,4 +40,9 @@ jobs:
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
           name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+          # Keep commit highlights, then append PR details, authors, and the comparison link.
+          generate_release_notes: true
+          body: |
+            ## Highlights
+
+            ${{ steps.changelog.outputs.clean_changelog }}
