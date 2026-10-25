@@ -1,7 +1,7 @@
 {{ define "main" }}
 	<article class="article wrap">
 		<header class="article-header">
-			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relURL }}{{ else }}{{ "/" | relURL }}{{ end }}">
+			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relURL }}{{ else }}{{ site.Home.RelPermalink }}{{ end }}">
 				← {{ if eq .Section "blog" }}Back to the blog{{ else }}Back home{{ end }}
 			</a>
 			<h1>{{ .Title }}</h1>

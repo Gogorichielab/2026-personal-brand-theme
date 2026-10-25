@@ -2,7 +2,7 @@
 	<div class="wrap">
 		<div class="footer-top">
 			<div>
-				<a class="wordmark" href="{{ "/" | relURL }}">{{ .Site.Params.brand.name | default .Site.Title }}<span>{{ .Site.Params.brand.mark | default "." }}</span></a>
+				<a class="wordmark" href="{{ site.Home.RelPermalink }}">{{ .Site.Params.brand.name | default .Site.Title }}<span>{{ .Site.Params.brand.mark | default "." }}</span></a>
 				{{ with .Site.Params.brand.footer_tagline }}<p>{{ . }}</p>{{ end }}
 			</div>
 			<nav aria-label="Social links">
