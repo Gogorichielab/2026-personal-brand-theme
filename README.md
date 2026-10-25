@@ -7,9 +7,6 @@
 [![Release workflow](https://img.shields.io/github/actions/workflow/status/Gogorichielab/2026-personal-brand-theme/release.yml?branch=main&label=release%20workflow)](https://github.com/Gogorichielab/2026-personal-brand-theme/actions/workflows/release.yml)
 [![Live demo status](https://img.shields.io/website?url=https%3A%2F%2Fgogorichielab.github.io%2F2026-personal-brand-theme%2F&label=live%20demo)](https://gogorichielab.github.io/2026-personal-brand-theme/)
 
-[![GitHub stars](https://img.shields.io/github/stars/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/forks)
-[![GitHub watchers](https://img.shields.io/github/watchers/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/watchers)
 [![Contributors](https://img.shields.io/github/contributors/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/graphs/contributors)
 [![Last commit](https://img.shields.io/github/last-commit/Gogorichielab/2026-personal-brand-theme/main)](https://github.com/Gogorichielab/2026-personal-brand-theme/commits/main/)
 [![Monthly commit activity](https://img.shields.io/github/commit-activity/m/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/graphs/commit-activity)
