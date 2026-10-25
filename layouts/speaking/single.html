@@ -1,7 +1,7 @@
 {{ define "main" }}
 <section class="speaking-layout wrap" aria-labelledby="speaking-title">
   <div class="speaking-lead">
-    <p class="eyebrow">Speaking</p>
+    <p class="eyebrow">{{ .Params.eyebrow | default "Speaking" }}</p>
     <h1 id="speaking-title">
       {{ range $index, $line := .Params.headline_lines }}
         {{ if $index }}<br>{{ end }}{{ $line }}
@@ -14,25 +14,31 @@
       {{ end }}
     </ul>
     <div class="speaking-actions">
-      <a class="button" href="{{ .Params.invite_url }}">
-        Invite me to speak
-      </a>
-      <a class="button speaking-profile" href="{{ .Params.profile_url }}">
-        Sessionize profile <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-    <figure class="speaking-photo">
-      {{ with .Resources.GetMatch .Params.photo }}
-        {{ $spec := "webp q82" }}
-        {{ if gt .Width 1600 }}
-          {{ $spec = "resize 1600x webp q82" }}
-        {{ end }}
-        {{ $photo := .Process $spec }}
-        <img src="{{ $photo.RelPermalink }}" alt="{{ $.Params.photo_alt }}" width="{{ $photo.Width }}" height="{{ $photo.Height }}" loading="lazy" decoding="async">
-      {{ else }}
-        <img src="{{ .Params.photo | relURL }}" alt="{{ .Params.photo_alt }}" width="1200" height="600" loading="lazy" decoding="async">
+      {{ with .Params.invite_url }}
+        <a class="button" href="{{ . }}">
+          {{ $.Params.invite_text | default "Invite me to speak" }}
+        </a>
       {{ end }}
-    </figure>
+      {{ with .Params.profile_url }}
+        <a class="button speaking-profile" href="{{ . }}">
+          {{ $.Params.profile_text | default "Sessionize profile" }} <span aria-hidden="true">↗</span>
+        </a>
+      {{ end }}
+    </div>
+    {{ with .Params.photo }}
+      <figure class="speaking-photo">
+        {{ with $.Resources.GetMatch . }}
+          {{ $spec := "webp q82" }}
+          {{ if gt .Width 1600 }}
+            {{ $spec = "resize 1600x webp q82" }}
+          {{ end }}
+          {{ $photo := .Process $spec }}
+          <img src="{{ $photo.RelPermalink }}" alt="{{ $.Params.photo_alt }}" width="{{ $photo.Width }}" height="{{ $photo.Height }}" loading="lazy" decoding="async">
+        {{ else }}
+          <img src="{{ . | relURL }}" alt="{{ $.Params.photo_alt }}" width="1200" height="600" loading="lazy" decoding="async">
+        {{ end }}
+      </figure>
+    {{ end }}
   </div>
   <div class="speaking-talks">
     <h2 class="sr-only">Latest talks and podcast appearances</h2>
