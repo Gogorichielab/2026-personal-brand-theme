@@ -1,21 +1,29 @@
 {{- /* Returns a CSS resource with the palette: preset values, then params.colors overrides.
+  With appearance "auto", the night palette applies when the visitor's system prefers dark.
   Presets live here rather than in data/: .Site.Data is deprecated from Hugo 0.156 and hugo.Data doesn't exist in 0.146. */ -}}
 {{- $presets := dict
   "navy" (dict
     "ink" "#102b4c" "muted" "#4a6179" "accent" "#2d6089" "sky" "#b5d9f3" "pale" "#e5f1fa" "paper" "#f8fbfe" "line" "#c5d7e6"
-    "focus" "#4075a2" "band" "#d0e5f5" "frame" "#8eacc4" "frame_border" "#7298b6" "stage" "#dceaf5" "rule" "#a5bed2")
+    "focus" "#4075a2" "band" "#d0e5f5" "frame" "#8eacc4" "frame_border" "#7298b6" "stage" "#dceaf5" "rule" "#a5bed2" "surface" "#ffffff")
   "forest" (dict
     "ink" "#173a2c" "muted" "#46604f" "accent" "#2c6a4c" "sky" "#b8e0c8" "pale" "#e6f3eb" "paper" "#f8fcf9" "line" "#c6dccf"
-    "focus" "#3a7a5a" "band" "#d1eadb" "frame" "#91b9a2" "frame_border" "#74a088" "stage" "#ddefe4" "rule" "#a7c7b4")
+    "focus" "#3a7a5a" "band" "#d1eadb" "frame" "#91b9a2" "frame_border" "#74a088" "stage" "#ddefe4" "rule" "#a7c7b4" "surface" "#ffffff")
+  "night" (dict
+    "ink" "#e4edf6" "muted" "#a9bccf" "accent" "#8cc3ee" "sky" "#1e3a58" "pale" "#13243a" "paper" "#0b1726" "line" "#2c4560"
+    "focus" "#6fb2e8" "band" "#17304b" "frame" "#3c5f80" "frame_border" "#5a7fa3" "stage" "#112238" "rule" "#34506d" "surface" "#0f1e30")
 -}}
 {{- $config := site.Params.colors | default dict -}}
 {{- $name := $config.preset | default "navy" -}}
 {{- $palette := index $presets $name -}}
 {{- if not $palette -}}
-  {{- errorf "params.colors.preset: unknown preset %q. Use one of: navy, forest." $name -}}
+  {{- errorf "params.colors.preset: unknown preset %q. Use one of: navy, forest, night." $name -}}
+{{- end -}}
+{{- $appearance := $config.appearance | default "light" -}}
+{{- if not (in (slice "light" "auto") $appearance) -}}
+  {{- errorf "params.colors.appearance: %q is not supported. Use \"light\" or \"auto\"." $appearance -}}
 {{- end -}}
 {{- range $key, $_ := $config -}}
-  {{- if and (ne $key "preset") (not (isset $palette $key)) -}}
+  {{- if and (not (in (slice "preset" "appearance") $key)) (not (isset $palette $key)) -}}
     {{- errorf "params.colors.%s: unknown color. Supported colors are listed in the theme README." $key -}}
   {{- end -}}
 {{- end -}}
@@ -27,4 +35,12 @@
   {{- end -}}
   {{- $css = printf "%s--%s:%s;" $css (replace $key "_" "-") $value -}}
 {{- end -}}
-{{- return resources.FromString "css/colors.css" (printf ":root{%s}" $css) -}}
+{{- $css = printf ":root{%s}" $css -}}
+{{- if eq $appearance "auto" -}}
+  {{- $night := "" -}}
+  {{- range $key, $value := index $presets "night" -}}
+    {{- $night = printf "%s--%s:%s;" $night (replace $key "_" "-") $value -}}
+  {{- end -}}
+  {{- $css = printf "%s:root{color-scheme:light dark}@media (prefers-color-scheme:dark){:root{%s}}" $css $night -}}
+{{- end -}}
+{{- return resources.FromString "css/colors.css" $css -}}
