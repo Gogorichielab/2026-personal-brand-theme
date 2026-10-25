@@ -1,5 +1,43 @@
 # 2026 Personal Brand Theme
 
+[![Latest release](https://img.shields.io/github/v/release/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/releases/latest)
+[![Release date](https://img.shields.io/github/release-date/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/releases)
+[![License](https://img.shields.io/github/license/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/LICENSE)
+[![Demo build](https://img.shields.io/github/actions/workflow/status/Gogorichielab/2026-personal-brand-theme/pages.yml?branch=main&label=demo%20build)](https://github.com/Gogorichielab/2026-personal-brand-theme/actions/workflows/pages.yml)
+[![Release workflow](https://img.shields.io/github/actions/workflow/status/Gogorichielab/2026-personal-brand-theme/release.yml?branch=main&label=release%20workflow)](https://github.com/Gogorichielab/2026-personal-brand-theme/actions/workflows/release.yml)
+[![Live demo status](https://img.shields.io/website?url=https%3A%2F%2Fgogorichielab.github.io%2F2026-personal-brand-theme%2F&label=live%20demo)](https://gogorichielab.github.io/2026-personal-brand-theme/)
+
+[![GitHub stars](https://img.shields.io/github/stars/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/forks)
+[![GitHub watchers](https://img.shields.io/github/watchers/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/watchers)
+[![Contributors](https://img.shields.io/github/contributors/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/graphs/contributors)
+[![Last commit](https://img.shields.io/github/last-commit/Gogorichielab/2026-personal-brand-theme/main)](https://github.com/Gogorichielab/2026-personal-brand-theme/commits/main/)
+[![Monthly commit activity](https://img.shields.io/github/commit-activity/m/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/graphs/commit-activity)
+
+[![Open issues](https://img.shields.io/github/issues/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/issues)
+[![Closed issues](https://img.shields.io/github/issues-closed/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/issues?q=is%3Aissue%20is%3Aclosed)
+[![Open pull requests](https://img.shields.io/github/issues-pr/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/pulls)
+[![Closed pull requests](https://img.shields.io/github/issues-pr-closed/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme/pulls?q=is%3Apr%20is%3Aclosed)
+[![Commits since latest release](https://img.shields.io/github/commits-since/Gogorichielab/2026-personal-brand-theme/latest)](https://github.com/Gogorichielab/2026-personal-brand-theme/commits/main/)
+
+[![Top language](https://img.shields.io/github/languages/top/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
+[![Language count](https://img.shields.io/github/languages/count/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
+[![Code size](https://img.shields.io/github/languages/code-size/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
+[![Repository size](https://img.shields.io/github/repo-size/Gogorichielab/2026-personal-brand-theme)](https://github.com/Gogorichielab/2026-personal-brand-theme)
+
+[![Minimum Hugo Extended version](https://img.shields.io/badge/Hugo_Extended-%E2%89%A5_0.146.0-FF4088?logo=hugo&logoColor=white)](https://gohugo.io/installation/)
+[![Hugo version used in CI](https://img.shields.io/badge/Hugo_CI-0.152.2-FF4088?logo=hugo&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/.github/workflows/pages.yml)
+[![HTML templates](https://img.shields.io/badge/Templates-HTML-E34F26?logo=html5&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/layouts)
+[![CSS styles](https://img.shields.io/badge/Styles-CSS-663399?logo=css&logoColor=white)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/css)
+[![JavaScript search](https://img.shields.io/badge/Search-JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://github.com/Gogorichielab/2026-personal-brand-theme/tree/main/assets/js)
+[![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/)
+
+[![Responsive layout](https://img.shields.io/badge/Layout-responsive-2D6089)](https://gogorichielab.github.io/2026-personal-brand-theme/)
+[![Optional client-side search](https://img.shields.io/badge/Client--side_search-optional-2D6089)](#blog-search)
+[![RSS feed](https://img.shields.io/badge/Feed-RSS-FFA500?logo=rss&logoColor=white)](https://gogorichielab.github.io/2026-personal-brand-theme/blog/index.xml)
+[![Social previews](https://img.shields.io/badge/Social_previews-Open_Graph_%2B_Twitter-2D6089)](#search-and-social-previews)
+[![Structured data](https://img.shields.io/badge/JSON--LD-BlogPosting-2D6089)](https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/layouts/_partials/seo-schema.html)
+
 A responsive Hugo theme that puts a person and their work up front, with the blog close behind. It includes a configurable homepage, post archive, optional client-side search, author details, social links, project highlights, and an optional speaking page layout.
 
 ![Example homepage showing the personal introduction, latest blog posts, project highlights, and contact section.](exampleSite/homepage-screenshot.png)
