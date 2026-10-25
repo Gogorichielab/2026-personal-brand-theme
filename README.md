@@ -156,9 +156,38 @@ For a social preview image, set `images` to a list of image paths in front matte
 ```yaml
 description: "What readers will learn from this article."
 images: ["cover.png"]
+image_alt: "A short description of the preview image."
 ```
 
-An image in a page bundle is resolved from that bundle. Static images can use paths such as `images/social-card.png`, and absolute HTTPS image URLs are also supported. Set `params.images` in the site configuration for a default social image. Pages without an image use a summary card.
+An image in a page bundle is resolved from that bundle. Static images can use paths such as `images/social-card.png` (a leading `/` also works under a subpath), and absolute HTTPS image URLs are also supported. Set `params.images` and `params.image_alt` in the site configuration for a default social image. `image_alt` becomes the preview's alternative text; a page's own `image_alt` only applies to its own image. Pages without an image use a summary card.
+
+## Brand Colors
+
+Pick a color preset and override individual colors under `params.colors`. Without any settings, the theme uses the `navy` preset.
+
+```toml
+[params.colors]
+  preset = "forest"   # "navy" (default) or "forest"
+  accent = "#1f5c8a"  # optional: overrides the preset's value
+```
+
+Each color is the preset's value unless you set it. Colors must be hex values such as `#2d6089`. An unknown preset, an unknown color name or a value that isn't a hex color stops the build with a message naming the setting.
+
+| Key | Used for |
+| --- | --- |
+| `ink` | Main text and dark sections |
+| `muted` | Secondary text |
+| `accent` | Links and hover states |
+| `sky`, `pale` | Highlights and soft backgrounds |
+| `paper` | Page background |
+| `line` | Borders and rules |
+| `focus` | Keyboard focus outline |
+| `band` | The "Beyond the blog" band, and light text on dark sections |
+| `frame`, `frame_border` | Portrait background and border |
+| `stage` | Speaking page background |
+| `rule` | Dividers between talks |
+
+Both built-in presets meet WCAG AA contrast for body text. Custom colors are not checked, so test your own palette with a contrast checker before publishing.
 
 ## Validation
 

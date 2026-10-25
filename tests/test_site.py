@@ -91,6 +91,7 @@ class SiteTests(unittest.TestCase):
             '---\ntitle: "Remote image"\n'
             'images: ["https://example.net/social.png"]\n---\n'
         )
+        cls.source, cls.work = source, work
         cls.sites = []
         for name, prefix in (("root", "/"), ("subpath", "/theme-demo/")):
             output = work / name
@@ -114,7 +115,10 @@ class SiteTests(unittest.TestCase):
             cls.sites.append((output, base, prefix))
         # Rebuild with a site-wide static image to check the optional fallback.
         override = source / "social.toml"
-        override.write_text('[params]\nimages = ["images/portrait.svg"]\n')
+        override.write_text(
+            '[params]\nimages = ["/images/portrait.svg"]\n'
+            'image_alt = "Site default preview"\n'
+        )
         cls.default_site = work / "default-image"
         subprocess.run(
             [
@@ -141,11 +145,22 @@ class SiteTests(unittest.TestCase):
             "https://example.test/theme-demo/images/portrait.svg",
         )
         self.assertEqual(fallback.value("twitter:card"), "summary_large_image")
+        self.assertEqual(fallback.value("og:image:alt"), "Site default preview")
+        self.assertEqual(fallback.value("twitter:image:alt"), "Site default preview")
         bundle = Page(self.default_site / "blog/building-this-theme/index.html")
         self.assertEqual(
             bundle.value("og:image"),
             "https://example.test/theme-demo/blog/building-this-theme/cover.png",
         )
+        # A page's own image keeps its own alt text, not the site default's.
+        self.assertEqual(
+            bundle.value("og:image:alt"),
+            "Abstract cover illustration in the theme's blue palette",
+        )
+        for output, _, _ in self.sites:
+            remote = Page(output / "remote-image/index.html")
+            self.assertNotIn("og:image:alt", remote.meta)
+            self.assertNotIn("twitter:image:alt", remote.meta)
 
     def test_page_descriptions_and_sharing(self):
         for output, base, _ in self.sites:
@@ -246,6 +261,58 @@ class SiteTests(unittest.TestCase):
                             (path, href),
                         )
 
+    def build(self, name, toml):
+        """Build the example site with an extra config file; return the result."""
+        override = self.source / f"{name}.toml"
+        override.write_text(toml)
+        output = self.work / name
+        result = subprocess.run(
+            [
+                os.environ.get("HUGO_BIN", "hugo"),
+                "--source", str(self.source),
+                "--themesDir", str(REPO.parent),
+                "--theme", REPO.name,
+                "--destination", str(output),
+                "--config", f"{self.source / 'config.toml'},{override}",
+                "--noBuildLock",
+            ],
+            env={**os.environ, "HUGO_RESOURCEDIR": str(self.work / "resources")},
+            capture_output=True, text=True,
+        )
+        return result, output
+
+    @staticmethod
+    def stylesheet(output):
+        (css,) = (output / "css").glob("personal*.css")
+        return css.read_text()
+
+    def test_default_brand_colors(self):
+        for output, _, _ in self.sites:
+            css = self.stylesheet(output)
+            for value in ("--ink:#102b4c", "--accent:#2d6089", "--focus:#4075a2", "--rule:#a5bed2"):
+                self.assertIn(value, css)
+
+    def test_color_preset_and_override(self):
+        result, output = self.build(
+            "forest", '[params.colors]\npreset = "forest"\naccent = "#123456"\n'
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        css = self.stylesheet(output)
+        self.assertIn("--ink:#173a2c", css)
+        self.assertIn("--accent:#123456", css)
+        self.assertNotIn("#102b4c", css)
+
+
+    def test_invalid_color_settings_fail_with_the_setting_name(self):
+        for name, toml, message in (
+            ("bad-preset", '[params.colors]\npreset = "neon"\n', "params.colors.preset"),
+            ("bad-value", '[params.colors]\naccent = "blue"\n', "params.colors.accent"),
+            ("bad-key", '[params.colors]\nbrand = "#123456"\n', "params.colors.brand"),
+        ):
+            with self.subTest(name=name):
+                result, _ = self.build(name, toml)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(message, result.stderr)
 
 if __name__ == "__main__":
     unittest.main()
