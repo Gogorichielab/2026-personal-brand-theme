@@ -13,6 +13,7 @@ A Hugo theme: simple, clean, personal-brand first, content second. See `README.m
   - `docs:`, `chore:`, `style:`, `refactor:`, `test:`, `ci:` do not trigger a release.
 - Don't create `v*` tags or GitHub Releases by hand; `.github/workflows/release.yml` tags each releasable merge to `main` and writes the release notes. There is no `CHANGELOG.md` or version file; release notes live on the GitHub Releases page.
 - No Node: don't add `package.json` or npm dependencies. Use Hugo Pipes for any asset processing.
+- Never hard-code interface text in templates or scripts. Add a key to `i18n/en.toml` (and `i18n/es.toml`) and use `T`; scripts read their text from `data-` attributes.
 - Follow standard Hugo theme layout (`layouts/`, `assets/`, `static/`, `archetypes/`, `i18n/`, `theme.toml`) as it gets added.
 
 ## Skills
