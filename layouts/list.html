@@ -1,6 +1,6 @@
 {{ define "main" }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">{{ .Params.eyebrow | default (cond (eq .Section "blog") (T "blog_eyebrow") (T "list_eyebrow")) }}</p>
+		<p class="eyebrow">{{ .Params.eyebrow | default (cond (eq .Section "blog") (T "blog_eyebrow") (cond (eq .Section "series") (T "series_eyebrow") (T "list_eyebrow"))) }}</p>
 		<h1>{{ .Params.heading | default (cond (eq .Section "blog") (T "blog_heading") .Title) }}<span>.</span></h1>
 		<div class="intro-copy">{{ .Content }}</div>
 	</section>

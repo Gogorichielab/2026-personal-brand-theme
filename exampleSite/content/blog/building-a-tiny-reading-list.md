@@ -2,6 +2,8 @@
 title: "Building a Tiny Reading List"
 date: 2026-04-16T09:00:00-05:00
 tags: ["project","web"]
+series: ["From Idea to README"]
+series_weight: 2
 lead: "A small static page is sometimes all the software a collection needs."
 ---
 

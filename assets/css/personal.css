@@ -70,3 +70,8 @@ body.speaking-page { background: var(--stage); }
 .article-share .copy-code{margin:0}
 .share-fallback{font-size:13px;overflow-wrap:anywhere}
 .lang-nav .nav-list{gap:14px;justify-content:flex-start}
+.series-box{background:var(--pale);padding:15px 18px;font-size:14px;margin-top:28px}
+.series-box p{margin:0}
+.series-box summary{cursor:pointer;font-weight:700;margin-top:8px}
+.series-box ol{margin:10px 0 0;padding-left:22px}
+.series-box [aria-current]{font-weight:700;text-decoration:none}

@@ -1,0 +1,14 @@
+{{- /* A series term's published parts; Hugo already orders them by series_weight. A missing or repeated number stops the build. */ -}}
+{{- $seen := dict -}}
+{{- range $page := .Pages -}}
+  {{- $n := .Params.series_weight -}}
+  {{- if not $n -}}
+    {{- errorf "series %q: %s needs a series_weight (1, 2, 3, …) to set its place in the series" $.LinkTitle .File.Path -}}
+  {{- end -}}
+  {{- $key := string $n -}}
+  {{- with index $seen $key -}}
+    {{- errorf "series %q: %s and %s both have series_weight %s; give each part its own number" $.LinkTitle . $page.File.Path $key -}}
+  {{- end -}}
+  {{- $seen = merge $seen (dict $key .File.Path) -}}
+{{- end -}}
+{{- return .Pages -}}
