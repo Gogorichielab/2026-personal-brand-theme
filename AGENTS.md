@@ -11,8 +11,8 @@ A Hugo theme: simple, clean, personal-brand first, content second. See `README.m
 - **Use [Conventional Commits](https://www.conventionalcommits.org/).** Releases are cut automatically from commit messages on `main`:
   - `feat:` → minor release, `fix:` / `perf:` → patch release, `feat!:` or a `BREAKING CHANGE:` footer → major release.
   - `docs:`, `chore:`, `style:`, `refactor:`, `test:`, `ci:` do not trigger a release.
-- Don't edit `CHANGELOG.md` or the `version` in `package.json` by hand; `.github/workflows/release.yml` owns both and tags `vX.Y.Z`.
-- `package.json` exists only as the release version source. Don't add Node dependencies unless the theme genuinely needs a build step.
+- Don't edit `CHANGELOG.md` by hand or create `v*` tags manually; `.github/workflows/release.yml` owns both. Versions come from git tags (`vX.Y.Z`), not a version file.
+- No Node: don't add `package.json` or npm dependencies. Use Hugo Pipes for any asset processing.
 - Follow standard Hugo theme layout (`layouts/`, `assets/`, `static/`, `archetypes/`, `i18n/`, `theme.toml`) as it gets added.
 
 ## Checking your work

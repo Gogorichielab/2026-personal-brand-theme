@@ -22,62 +22,14 @@ jobs:
           # since the previous release tag.
           fetch-depth: 0
 
-      - name: Align version file with latest release tag
-        run: |
-          node <<'NODE'
-          const fs = require('node:fs');
-          const { execFileSync } = require('node:child_process');
-
-          let latestTag = '';
-          try {
-            latestTag = execFileSync(
-              'git',
-              ['for-each-ref', '--count=1', '--sort=-version:refname', '--format=%(refname:short)', 'refs/tags/v*'],
-              { encoding: 'utf8' }
-            ).trim();
-          } catch (error) {
-            console.log('Unable to read release tags, skipping version alignment.');
-            process.exit(0);
-          }
-          if (!/^v\d+\.\d+\.\d+$/.test(latestTag)) {
-            console.log('No semver release tags found, skipping version alignment.');
-            process.exit(0);
-          }
-
-          const latestVersion = latestTag.slice(1);
-          const packageJsonPath = './package.json';
-          const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-          const currentVersion = packageJson.version;
-          if (!/^\d+\.\d+\.\d+$/.test(currentVersion)) {
-            console.log(`package.json version (${currentVersion}) is not strict semver, skipping version alignment.`);
-            process.exit(0);
-          }
-
-          const parseVersion = (version) => version.split('.').map((part) => Number.parseInt(part, 10));
-          const [currentMajor, currentMinor, currentPatch] = parseVersion(currentVersion);
-          const [latestMajor, latestMinor, latestPatch] = parseVersion(latestVersion);
-          const latestIsGreater =
-            latestMajor > currentMajor ||
-            (latestMajor === currentMajor && latestMinor > currentMinor) ||
-            (latestMajor === currentMajor && latestMinor === currentMinor && latestPatch > currentPatch);
-
-          if (!latestIsGreater) {
-            console.log(`package.json version (${currentVersion}) is already >= latest tag (${latestVersion}).`);
-            process.exit(0);
-          }
-
-          packageJson.version = latestVersion;
-          fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
-          console.log(`Aligned package.json version from ${currentVersion} to ${latestVersion}.`);
-          NODE
-
       - name: Generate changelog entry and bump version
         id: changelog
         uses: TriPSs/conventional-changelog-action@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-message: 'chore(release): {version}'
-          version-file: ./package.json
+          # No package.json in a Hugo theme: derive versions from v* git tags.
+          skip-version-file: true
           output-file: CHANGELOG.md
           tag-prefix: v
           fallback-version: 0.1.0
