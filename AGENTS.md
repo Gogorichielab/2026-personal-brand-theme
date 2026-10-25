@@ -6,6 +6,8 @@ Guidance for AI coding agents working in this repository.
 
 A Hugo theme: simple, clean, personal-brand first, content second. See `README.md`.
 
+Read `CONTRIBUTING.md` for the contribution workflow and local checks. Follow `SECURITY.md` when handling security reports.
+
 ## Conventions
 
 - **Use [Conventional Commits](https://www.conventionalcommits.org/).** Releases are cut automatically from commit messages on `main`:
@@ -30,6 +32,11 @@ Install skills globally (in your home directory), not into this repo, and never 
 
 ## Pull requests
 
+- Use the repository's issue and PR templates. Link the related issue, explain the change, and report the checks you ran.
+- Include before/after screenshots for visual changes. Update documentation, examples, and translations when behavior changes.
+- Keep PR titles in Conventional Commits format.
+- `.github/CODEOWNERS` assigns `@gogorichie` as the default owner for all files, including the ownership file. Keep ownership entries accurate; code-owner approval requirements are managed separately through repository rules.
+
 When you open a pull request, label it with the agent that created it:
 
 | Created by | Label |
@@ -42,6 +49,8 @@ Use the existing label exactly as named; don't create variants.
 
 ## Checking your work
 
-- Build the demo with `hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme` and fix any errors or warnings. `.github/workflows/pages.yml` deploys it to GitHub Pages on every push to `main`.
+- For code changes, run `python3 -m unittest discover -s tests -v` with Hugo Extended available as `hugo`, or set `HUGO_BIN` to its executable path. Report any checks you could not run.
+- For documentation-only changes, check links, formatting, and any commands or configuration examples you changed.
+- Build the demo with `hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme --minify --panicOnWarning` and fix any errors or warnings. `.github/workflows/pages.yml` deploys it to GitHub Pages on every push to `main`.
 - The demo is served from a subpath (`/2026-personal-brand-theme/`), so build links with `relURL`/`.RelPermalink` and never `"/" | relURL` (a leading slash drops the subpath); use `site.Home.RelPermalink` for the home link.
 - Keep pages accessible: semantic HTML, alt text, visible focus states, sufficient color contrast.
