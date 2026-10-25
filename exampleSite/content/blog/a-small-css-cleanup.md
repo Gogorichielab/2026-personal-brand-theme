@@ -1,7 +1,7 @@
 ---
 title: "A Small CSS Cleanup"
 date: 2026-05-01T09:00:00-05:00
-tags: ["web","projects"]
+tags: ["web","project"]
 lead: "A short maintenance session made a stylesheet easier to understand."
 ---
 

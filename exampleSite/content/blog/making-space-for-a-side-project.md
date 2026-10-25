@@ -1,7 +1,7 @@
 ---
 title: "Making Space for a Side Project"
 date: 2026-06-03T09:00:00-05:00
-tags: ["projects","notes"]
+tags: ["project","notes"]
 lead: "A modest weekly routine can carry an idea further than a grand launch plan."
 ---
 

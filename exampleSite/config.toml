@@ -63,6 +63,12 @@ enableRobotsTXT = true
 [Params.search]
   enabled = true
 
+[Params.copy_code]
+  enabled = true
+
+[Params.colors]
+  appearance = "auto"
+
 [Params.related]
   enabled = true
   limit = 3
