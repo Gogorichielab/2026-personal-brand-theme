@@ -1,7 +1,7 @@
 ---
 title: "The Case for a Project Notebook"
 date: 2026-04-09T09:00:00-05:00
-tags: ["projects","notes"]
+tags: ["project","notes"]
 lead: "One place for decisions can save a surprising amount of repeated work."
 ---
 

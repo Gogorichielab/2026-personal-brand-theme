@@ -1,7 +1,7 @@
 ---
 title: "Writing a Useful README"
 date: 2026-05-15T09:00:00-05:00
-tags: ["projects","writing"]
+tags: ["project","writing"]
 lead: "Help the next person get from curiosity to a working first step."
 ---
 

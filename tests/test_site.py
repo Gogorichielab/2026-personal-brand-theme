@@ -265,7 +265,7 @@ class SiteTests(unittest.TestCase):
         for output, base, prefix in self.sites:
             with self.subTest(base=base):
                 entries = json.loads((output / "blog/search.json").read_text())
-                self.assertEqual(len(entries), 17)
+                self.assertEqual(len(entries), 18)
                 for entry in entries:
                     self.assertTrue(entry["url"].startswith(prefix + "blog/"))
                 for path in output.rglob("*.html"):
@@ -361,6 +361,30 @@ class SiteTests(unittest.TestCase):
                 self.assertEqual(small["width"], "300")
                 self.assertEqual(external["src"], "https://example.net/photo.jpg")
                 self.assertNotIn("srcset", external)
+
+    def test_copy_code_script_only_where_needed(self):
+        for output, _, _ in self.sites:
+            self.assertIn("code-copy", (output / "blog/copying-code-examples/index.html").read_text())
+            self.assertNotIn("code-copy", (output / "blog/first-post/index.html").read_text())
+            self.assertNotIn("code-copy", (output / "index.html").read_text())
+        result, output = self.build("no-copy", "[params.copy_code]\nenabled = false\n")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("code-copy", (output / "blog/copying-code-examples/index.html").read_text())
+
+    def test_dark_appearance(self):
+        for output, _, _ in self.sites:  # the example site opts into "auto"
+            css = self.stylesheet(output)
+            self.assertIn("prefers-color-scheme:dark", css)
+            self.assertIn("--ink:#e4edf6", css)
+            self.assertIn("--surface:#ffffff", css)
+        result, output = self.build("light-only", '[params.colors]\nappearance = "light"\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        css = self.stylesheet(output)
+        self.assertNotIn("prefers-color-scheme", css)
+        self.assertNotIn("#e4edf6", css)
+        result, _ = self.build("bad-appearance", '[params.colors]\nappearance = "dim"\n')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("params.colors.appearance", result.stderr)
 
     def test_default_brand_colors(self):
         for output, _, _ in self.sites:

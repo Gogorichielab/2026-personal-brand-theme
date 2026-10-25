@@ -169,6 +169,17 @@ The theme uses Hugo's [related content](https://gohugo.io/content-management/rel
 
 Results are ordered by relevance and are the same on every build of the same content.
 
+## Copy Buttons on Code
+
+Add a **Copy code** button above every code block in your posts:
+
+```toml
+[params.copy_code]
+  enabled = true
+```
+
+The button copies the code exactly, without line numbers, and confirms with "Copied". Screen readers hear the same confirmation, and focus stays on the button. If the browser blocks clipboard access, the button says "Copy failed" and the code can still be selected by hand. The small script loads only on pages that contain code. Without JavaScript, no button appears.
+
 ## Article Images
 
 JPEG and PNG images stored next to a post (in its page bundle) are converted to WebP, capped at 1600px wide, and offered in 480, 800 and 1200px versions (never wider than the original) with `srcset` and `sizes`, so phones download a smaller file. Other formats and external image URLs are used as they are.
@@ -199,11 +210,14 @@ Pick a color preset and override individual colors under `params.colors`. Withou
 
 ```toml
 [params.colors]
-  preset = "forest"   # "navy" (default) or "forest"
+  preset = "forest"   # "navy" (default), "forest" or "night"
   accent = "#1f5c8a"  # optional: overrides the preset's value
+  appearance = "auto" # optional: "light" (default) or "auto"
 ```
 
-Each color is the preset's value unless you set it. Colors must be hex values such as `#2d6089`. An unknown preset, an unknown color name or a value that isn't a hex color stops the build with a message naming the setting.
+With `appearance = "auto"`, visitors whose system is set to dark mode see the built-in `night` palette. It switches with the system setting, needs no JavaScript and doesn't flash the wrong colors on load. Your color overrides apply to the light palette only. `preset = "night"` makes a site always dark. There's no on-page toggle yet.
+
+Each color is the preset's value unless you set it. Colors must be hex values such as `#2d6089`. An unknown preset or `appearance` value, an unknown color name or a value that isn't a hex color stops the build with a message naming the setting.
 
 | Key | Used for |
 | --- | --- |
@@ -218,8 +232,9 @@ Each color is the preset's value unless you set it. Colors must be hex values su
 | `frame`, `frame_border` | Portrait background and border |
 | `stage` | Speaking page background |
 | `rule` | Dividers between talks |
+| `surface` | Form fields, the skip link and text on accent buttons |
 
-Both built-in presets meet WCAG AA contrast for body text. Custom colors are not checked, so test your own palette with a contrast checker before publishing.
+All three built-in presets meet WCAG AA contrast for body text. Custom colors are not checked, so test your own palette with a contrast checker before publishing.
 
 ## Validation
 

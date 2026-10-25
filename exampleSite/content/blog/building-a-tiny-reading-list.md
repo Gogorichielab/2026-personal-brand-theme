@@ -1,7 +1,7 @@
 ---
 title: "Building a Tiny Reading List"
 date: 2026-04-16T09:00:00-05:00
-tags: ["projects","web"]
+tags: ["project","web"]
 lead: "A small static page is sometimes all the software a collection needs."
 ---
 
