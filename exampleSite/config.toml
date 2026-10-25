@@ -7,7 +7,7 @@ enableRobotsTXT = true
   pagerSize = 6
 
 [Params]
-  description = "A personal site about ideas, projects, and community."
+  description = "Explore small web projects, practical notes on accessibility, and lessons from building in public. A demo of the 2026 Personal Brand Hugo theme."
 
 [Params.author]
   name = "Example Person"
@@ -19,20 +19,25 @@ enableRobotsTXT = true
 [Params.brand]
   name = "Example Person"
   mark = "."
-  connect_url = "https://example.org/contact/"
-  connect_text = "Let's connect"
+  connect_url = "contact/"
+  connect_text = "Start a conversation"
   about_url = "about/"
   github_url = "https://github.com/example"
   footer_tagline = "Always learning and sharing."
 
 [Params.home]
-  headline = ["Curiosity.", "Ideas."]
-  headline_accent = "Community."
-  intro = ["A personal site about the work, ideas, and people that matter to me.", "Follow along as I learn, build, and share what I discover."]
+  headline = ["Small tools.", "Useful notes."]
+  headline_accent = "Shared openly."
+  intro = ["Explore small web projects, practical notes on accessibility, and lessons from building in public.", "Start with a project, find an idea to try, or bring a question of your own."]
+  about_text = "Meet the author"
+  blog_text = "Find a practical guide"
   areas = ["Ideas", "Projects", "Community"]
   portrait_caption = "Usually found near a whiteboard"
   topics = ["Notes", "Hugo", "Accessibility"]
-  cta_url = "https://example.org/contact/"
+  cta_url = "contact/"
+  cta_title = "Have a project or a talk in mind?"
+  cta_text = "Share what you are working on, who it is for, and where you could use a hand."
+  cta_link_text = "Start a conversation"
 
 [[Params.home.highlights]]
   eyebrow = "01 / Build"

@@ -19,10 +19,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # The demo builds with the newest supported Hugo; `compat` covers the older ones.
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.152.2
+      HUGO_VERSION: 0.168.0
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -44,10 +45,35 @@ jobs:
           hugo --source exampleSite --themesDir ../.. --gc --minify --panicOnWarning \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
 
+      - name: Test theme integration
+        run: python3 -m unittest discover -s tests -v
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: exampleSite/public
+
+  # Run the integration tests on theme.toml's min_version and the three Hugo
+  # releases before the one `build` uses. Bump these with HUGO_VERSION.
+  compat:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        hugo: ["0.146.0", "0.165.0", "0.166.0", "0.167.0"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install Hugo ${{ matrix.hugo }}
+        run: |
+          curl -sSL -o "${{ runner.temp }}/hugo.tar.gz" \
+            "https://github.com/gohugoio/hugo/releases/download/v${{ matrix.hugo }}/hugo_extended_${{ matrix.hugo }}_linux-amd64.tar.gz"
+          tar -xzf "${{ runner.temp }}/hugo.tar.gz" -C "${{ runner.temp }}" hugo
+          echo "${{ runner.temp }}" >> "$GITHUB_PATH"
+
+      - name: Test theme integration
+        run: python3 -m unittest discover -s tests -v
 
   deploy:
     if: github.event_name != 'pull_request'

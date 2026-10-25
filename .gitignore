@@ -1,3 +1,4 @@
 .hugo_build.lock
 exampleSite/public/
 **/resources/_gen/
+__pycache__/

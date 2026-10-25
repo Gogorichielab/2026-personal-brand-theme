@@ -15,6 +15,18 @@ A Hugo theme: simple, clean, personal-brand first, content second. See `README.m
 - No Node: don't add `package.json` or npm dependencies. Use Hugo Pipes for any asset processing.
 - Follow standard Hugo theme layout (`layouts/`, `assets/`, `static/`, `archetypes/`, `i18n/`, `theme.toml`) as it gets added.
 
+## Skills
+
+Use these skill packs. If your agent supports skills or plugins, install them; otherwise read the linked `SKILL.md` files and follow them.
+
+| Pack | Use it for | Install |
+| --- | --- | --- |
+| [Ponytail](https://github.com/DietrichGebert/ponytail) | **Every code change.** Write the smallest change that fully solves the task. Run `/ponytail-review` on your diff before opening a PR; `/ponytail-audit` for whole-repo reviews. | Claude Code: `/plugin marketplace add DietrichGebert/ponytail`, then `/plugin install ponytail@ponytail`. Codex: `codex plugin marketplace add DietrichGebert/ponytail`, then `codex plugin add ponytail@ponytail`. Others: follow its `AGENTS.md` / `skills/ponytail/SKILL.md`. |
+| [Marketing Skills](https://github.com/coreyhaines31/marketingskills) | Copy and content: README and demo text (`copywriting`, `copy-editing`), page structure and metadata (`seo-audit`, `schema`, `site-architecture`, `ai-seo`), and launch posts (`launch`). | `npx skills add coreyhaines31/marketingskills` (add `-a claude-code` in Claude Code), or the plugin route in its README. |
+| [Business Analysis Skills](https://github.com/45ck/business-analysis-skills) | Before building a feature: frame the problem (`problem-statement-refiner`), write `acceptance-criteria-writer` criteria, and find gaps (`edge-case-elicitor`, `requirements-gap-auditor`). | Clone it and run `bash install.sh`, or copy its `.claude/` / `.agents/` folders into your agent's skills directory. |
+
+Install skills globally (in your home directory), not into this repo, and never commit skill files here. If a skill conflicts with this file, this file wins. Never cut accessibility to make a change smaller.
+
 ## Pull requests
 
 When you open a pull request, label it with the agent that created it:
