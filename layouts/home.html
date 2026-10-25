@@ -1,18 +1,18 @@
 {{ define "main" }}
 {{ $home := .Site.Params.home | default dict }}
 {{ $author := .Site.Params.author | default dict }}
-{{ $headline := $home.headline | default (slice "Curiosity." "Code.") }}
-{{ $headlineAccent := $home.headline_accent | default "Community." }}
-{{ $intro := $home.intro | default (slice "A personal site about the work, ideas, and people that matter to me." "Follow along as I learn, build, and share what I discover.") }}
+{{ $headline := $home.headline | default (slice (T "home_headline_1") (T "home_headline_2")) }}
+{{ $headlineAccent := $home.headline_accent | default (T "home_headline_accent") }}
+{{ $intro := $home.intro | default (slice (T "home_intro_1") (T "home_intro_2")) }}
 {{ $paginator := partial "archive-paginator.html" . }}
 {{ if gt $paginator.PageNumber 1 }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">{{ $home.archive_eyebrow | default "From the archive" }}</p>
-		<h1>{{ $home.archive_title | default "More from the journey" }}<span>.</span></h1>
-		<p><a href="{{ "blog/" | relURL }}">Search and explore the full blog →</a></p>
+		<p class="eyebrow">{{ $home.archive_eyebrow | default (T "home_archive_eyebrow") }}</p>
+		<h1>{{ $home.archive_title | default (T "home_archive_title") }}<span>.</span></h1>
+		<p><a href="{{ "blog/" | relLangURL }}">{{ T "home_search_full_blog" }} →</a></p>
 	</section>
 	<section class="section-tight wrap">
-		<h2 class="sr-only">Articles</h2>
+		<h2 class="sr-only">{{ T "articles" }}</h2>
 		<div class="archive-grid">
 			{{ range $paginator.Pages }}
 				{{ partial "writing-card.html" . }}
@@ -29,8 +29,8 @@
 				{{ range $intro }}<p>{{ . }}</p>{{ end }}
 			</div>
 			<div class="actions">
-				<a class="button" href="{{ $home.about_url | default "about/" | relURL }}">{{ $home.about_text | default "A little about me" }} <span aria-hidden="true">↗</span></a>
-				<a class="text-link" href="{{ $home.blog_url | default "blog/" | relURL }}">{{ $home.blog_text | default "Read the blog" }} <span aria-hidden="true">→</span></a>
+				<a class="button" href="{{ $home.about_url | default "about/" | relLangURL }}">{{ $home.about_text | default (T "home_about_text") }} <span aria-hidden="true">↗</span></a>
+				<a class="text-link" href="{{ $home.blog_url | default "blog/" | relLangURL }}">{{ $home.blog_text | default (T "home_blog_text") }} <span aria-hidden="true">→</span></a>
 			</div>
 		</div>
 		{{ with $author.image }}
@@ -42,13 +42,13 @@
 	</section>
 	<div class="interest-band">
 		<div class="wrap">
-			{{ range $index, $area := ($home.areas | default (slice "Ideas" "Projects" "Community")) }}{{ if $index }}<i aria-hidden="true">✳</i>{{ end }}<span>{{ $area }}</span>{{ end }}
+			{{ range $index, $area := ($home.areas | default (slice (T "home_area_1") (T "home_area_2") (T "home_area_3"))) }}{{ if $index }}<i aria-hidden="true">✳</i>{{ end }}<span>{{ $area }}</span>{{ end }}
 		</div>
 	</div>
 	<section class="section wrap" aria-labelledby="writing-title">
 		<div class="section-heading">
-			<div><p class="eyebrow">{{ $home.latest_eyebrow | default "Notes from the journey" }}</p><h2 id="writing-title">{{ $home.latest_title | default "Lately, on the blog" }}<span>.</span></h2></div>
-			<a class="text-link" href="{{ $home.blog_url | default "blog/" | relURL }}">{{ $home.latest_link_text | default "All the posts" }} <span aria-hidden="true">→</span></a>
+			<div><p class="eyebrow">{{ $home.latest_eyebrow | default (T "home_latest_eyebrow") }}</p><h2 id="writing-title">{{ $home.latest_title | default (T "home_latest_title") }}<span>.</span></h2></div>
+			<a class="text-link" href="{{ $home.blog_url | default "blog/" | relLangURL }}">{{ $home.latest_link_text | default (T "home_latest_link") }} <span aria-hidden="true">→</span></a>
 		</div>
 		<div class="latest-grid">
 			{{ range first 3 (where .Site.RegularPages "Section" "blog") }}
@@ -56,7 +56,7 @@
 			{{ end }}
 		</div>
 		<div class="topic-line">
-			<span>{{ $home.topics_label | default "Explore a few topics" }}</span>
+			<span>{{ $home.topics_label | default (T "home_topics_label") }}</span>
 			{{ range ($home.topics | default (slice)) }}
 				{{ with $.Site.GetPage (printf "/tags/%s" (. | urlize)) }}
 					<a href="{{ .RelPermalink }}">{{ .Title }} ↗</a>
@@ -67,7 +67,7 @@
 	<section class="about-strip">
 		<div class="wrap">
 			{{ with $home.highlights }}
-				<div class="section-heading"><div><p class="eyebrow">{{ $home.highlights_eyebrow | default "Beyond the blog" }}</p><h2>{{ $home.highlights_title | default "A few ways I show up" }}<span>.</span></h2></div></div>
+				<div class="section-heading"><div><p class="eyebrow">{{ $home.highlights_eyebrow | default (T "home_highlights_eyebrow") }}</p><h2>{{ $home.highlights_title | default (T "home_highlights_title") }}<span>.</span></h2></div></div>
 				<div class="avenues">
 					{{ range . }}
 						<a class="avenue" href="{{ .url | relURL }}">
@@ -84,11 +84,11 @@
 	<section class="connect-section">
 		<div class="wrap connect-inner">
 			<div>
-				<p class="eyebrow">{{ $home.cta_eyebrow | default "Keep the conversation going" }}</p>
-				<h2>{{ $home.cta_title | default "Good things start with a hello." }}</h2>
-				<p>{{ $home.cta_text | default "Questions, ideas, or a shared curiosity. I'd love to connect." }}</p>
+				<p class="eyebrow">{{ $home.cta_eyebrow | default (T "home_cta_eyebrow") }}</p>
+				<h2>{{ $home.cta_title | default (T "home_cta_title") }}</h2>
+				<p>{{ $home.cta_text | default (T "home_cta_text") }}</p>
 			</div>
-			{{ with $home.cta_url }}<a class="button button-light" href="{{ . | relURL }}">{{ $home.cta_link_text | default "Get in touch" }} <span aria-hidden="true">↗</span></a>{{ end }}
+			{{ with $home.cta_url }}<a class="button button-light" href="{{ . | relURL }}">{{ $home.cta_link_text | default (T "home_cta_link") }} <span aria-hidden="true">↗</span></a>{{ end }}
 		</div>
 	</section>
 {{ end }}

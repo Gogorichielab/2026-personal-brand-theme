@@ -1,19 +1,19 @@
 {{ define "main" }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">{{ .Params.eyebrow | default (cond (eq .Section "blog") "The blog" "Explore the archive") }}</p>
-		<h1>{{ .Params.heading | default (cond (eq .Section "blog") "Ramblings, with a purpose" .Title) }}<span>.</span></h1>
+		<p class="eyebrow">{{ .Params.eyebrow | default (cond (eq .Section "blog") (T "blog_eyebrow") (T "list_eyebrow")) }}</p>
+		<h1>{{ .Params.heading | default (cond (eq .Section "blog") (T "blog_heading") .Title) }}<span>.</span></h1>
 		<div class="intro-copy">{{ .Content }}</div>
 	</section>
 	<section class="wrap archive section-tight">
 		{{ if and (eq .Section "blog") .Site.Params.search.enabled }}
 			<div class="archive-tools">
-				<label for="blog-search">Find something interesting</label>
-				<input id="blog-search" type="search" placeholder="Search articles, ideas, and topics…" data-index="{{ "blog/search.json" | relURL }}" aria-describedby="search-status">
+				<label for="blog-search">{{ T "search_label" }}</label>
+				<input id="blog-search" type="search" placeholder="{{ T "search_placeholder" }}" data-index="{{ "blog/search.json" | relLangURL }}" data-searching="{{ T "search_searching" }}" data-found-one="{{ T "search_found_one" }}" data-found-other="{{ T "search_found_other" }}" data-none="{{ T "search_none" }}" data-error="{{ T "search_error" }}" aria-describedby="search-status">
 				<p id="search-status" class="search-status" role="status" aria-live="polite"></p>
-				<a class="text-link" href="{{ "tags/" | relURL }}">Browse all topics ↗</a>
+				<a class="text-link" href="{{ "tags/" | relLangURL }}">{{ T "browse_topics" }} ↗</a>
 			</div>
 		{{ end }}
-		<h2 class="sr-only">Articles</h2>
+		<h2 class="sr-only">{{ T "articles" }}</h2>
 		<div id="archive-default">
 			<div class="archive-grid">
 				{{ $paginator := partial "archive-paginator.html" . }}

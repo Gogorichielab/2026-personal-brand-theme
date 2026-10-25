@@ -1,6 +1,6 @@
 <header class="site-header wrap">
-	<a class="wordmark" href="{{ site.Home.RelPermalink }}" aria-label="{{ .Site.Title }} — home">{{ .Site.Params.brand.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></a>
-	<nav aria-label="Main navigation">
+	<a class="wordmark" href="{{ site.Home.RelPermalink }}" aria-label="{{ T "home_aria" (dict "Site" .Site.Title) }}">{{ .Site.Params.brand.name | default .Site.Title }}<span aria-hidden="true">{{ .Site.Params.brand.mark | default "." }}</span></a>
+	<nav aria-label="{{ T "nav_main" }}">
 		<ul class="nav-list">
 			{{ range .Site.Menus.main }}
 				<li>
@@ -9,5 +9,16 @@
 			{{ end }}
 		</ul>
 	</nav>
-	{{ with .Site.Params.brand.connect_url }}<a class="header-connect" href="{{ . | relURL }}">{{ $.Site.Params.brand.connect_text | default "Let's connect" }} <span aria-hidden="true">↗</span></a>{{ end }}
+	{{ if hugo.IsMultilingual }}
+		<nav class="lang-nav" aria-label="{{ T "nav_languages" }}">
+			<ul class="nav-list">
+				{{ range site.Home.AllTranslations }}
+					{{ $target := . }}
+					{{ with where $.AllTranslations "Lang" .Lang }}{{ $target = index . 0 }}{{ end }}
+					<li><a href="{{ $target.RelPermalink }}" lang="{{ .Lang }}" hreflang="{{ .Lang }}"{{ if eq .Lang $.Lang }} aria-current="true"{{ end }}>{{ .Site.Params.language_label | default (upper .Lang) }}</a></li>
+				{{ end }}
+			</ul>
+		</nav>
+	{{ end }}
+	{{ with .Site.Params.brand.connect_url }}<a class="header-connect" href="{{ . | relURL }}">{{ $.Site.Params.brand.connect_text | default (T "connect_default") }} <span aria-hidden="true">↗</span></a>{{ end }}
 </header>

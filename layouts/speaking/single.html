@@ -1,14 +1,14 @@
 {{ define "main" }}
 <section class="speaking-layout wrap" aria-labelledby="speaking-title">
   <div class="speaking-lead">
-    <p class="eyebrow">{{ .Params.eyebrow | default "Speaking" }}</p>
+    <p class="eyebrow">{{ .Params.eyebrow | default (T "speaking_eyebrow") }}</p>
     <h1 id="speaking-title">
       {{ range $index, $line := .Params.headline_lines }}
         {{ if $index }}<br>{{ end }}{{ $line }}
       {{ end }}
     </h1>
     <p class="speaking-intro">{{ .Params.intro }}</p>
-    <ul class="speaking-topics" aria-label="Speaking topics">
+    <ul class="speaking-topics" aria-label="{{ T "speaking_topics_aria" }}">
       {{ range .Params.topics }}
         <li>{{ . }}</li>
       {{ end }}
@@ -16,12 +16,12 @@
     <div class="speaking-actions">
       {{ with .Params.invite_url }}
         <a class="button" href="{{ . | relURL }}">
-          {{ $.Params.invite_text | default "Invite me to speak" }}
+          {{ $.Params.invite_text | default (T "speaking_invite") }}
         </a>
       {{ end }}
       {{ with .Params.profile_url }}
         <a class="button speaking-profile" href="{{ . | relURL }}">
-          {{ $.Params.profile_text | default "Sessionize profile" }} <span aria-hidden="true">↗</span>
+          {{ $.Params.profile_text | default (T "speaking_profile") }} <span aria-hidden="true">↗</span>
         </a>
       {{ end }}
     </div>
@@ -41,7 +41,7 @@
     {{ end }}
   </div>
   <div class="speaking-talks">
-    <h2 class="sr-only">Latest talks and podcast appearances</h2>
+    <h2 class="sr-only">{{ T "speaking_talks_heading" }}</h2>
     {{ $posts := slice }}
     {{ range slice "/tags/conference-talks" "/tags/podcast" }}
       {{ with $.Site.GetPage . }}
@@ -56,22 +56,22 @@
             <div>
               <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
               <p>
-                {{ .Date.Format "Jan 2, 2006" }}
+                {{ time.Format ":date_medium" .Date }}
                 <span aria-hidden="true">·</span>
-                <a href="{{ .RelPermalink }}">Read the post</a>
+                <a href="{{ .RelPermalink }}">{{ T "read_post" }}</a>
               </p>
             </div>
           </li>
         {{ end }}
       </ol>
       {{ with .Site.GetPage "/tags/conference-talks" }}
-        <p><a class="text-link" href="{{ .RelPermalink }}">All conference posts <span aria-hidden="true">→</span></a></p>
+        <p><a class="text-link" href="{{ .RelPermalink }}">{{ T "all_conference_posts" }} <span aria-hidden="true">→</span></a></p>
       {{ end }}
       {{ with .Site.GetPage "/tags/podcast" }}
-        <p><a class="text-link" href="{{ .RelPermalink }}">All podcast posts <span aria-hidden="true">→</span></a></p>
+        <p><a class="text-link" href="{{ .RelPermalink }}">{{ T "all_podcast_posts" }} <span aria-hidden="true">→</span></a></p>
       {{ end }}
     {{ else }}
-      <p>No talks or podcast appearances yet.</p>
+      <p>{{ T "no_talks" }}</p>
     {{ end }}
   </div>
 </section>

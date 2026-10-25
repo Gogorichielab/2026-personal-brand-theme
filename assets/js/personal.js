@@ -4,6 +4,7 @@
   const normal = document.querySelector('#archive-default');
   const results = document.querySelector('#search-results');
   const status = document.querySelector('#search-status');
+  const t = field.dataset; // interface text from the theme's translations
   let index;
   let generation = 0;
   const load = () => index || (index = fetch(field.dataset.index).then(r => {
@@ -14,7 +15,7 @@
     const current = ++generation;
     const query = field.value.trim().toLocaleLowerCase();
     if (!query) { normal.hidden = false; results.hidden = true; status.textContent = ''; return; }
-    status.textContent = 'Searching the archive…';
+    status.textContent = t.searching;
     try {
       const posts = await load();
       if (current !== generation) return;
@@ -30,10 +31,12 @@
         article.append(date, heading, summary); results.append(article);
       }
       normal.hidden = true; results.hidden = false;
-      status.textContent = matches.length ? `${matches.length} ${matches.length === 1 ? 'article' : 'articles'} found.` : 'No articles found. Try another word or browse the topics.';
+      status.textContent = matches.length
+        ? (matches.length === 1 ? t.foundOne : t.foundOther).replace('{count}', matches.length)
+        : t.none;
     } catch (_) {
       if (current !== generation) return;
-      status.textContent = 'Search is unavailable right now. You can still browse the archive below.';
+      status.textContent = t.error;
       normal.hidden = false; results.hidden = true;
     }
   });

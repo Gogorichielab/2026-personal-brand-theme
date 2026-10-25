@@ -1,0 +1,117 @@
+# Theme interface text. Copy this file to i18n/<lang>.toml in your site to translate it.
+# Text you set in params and front matter (headings, intros, button labels) is
+# translated through per-language params instead; see the README.
+
+# Shared chrome
+skip_to_content = "Skip to content"
+home_aria = "{{ .Site }} — home"
+nav_main = "Main navigation"
+nav_languages = "Languages"
+connect_default = "Let's connect"
+nav_social = "Social links"
+rss = "RSS"
+footer_product_of = "Product of"
+footer_built_with = "Built with"
+explore_topics = "Explore all topics"
+
+# Archives and pagination
+pagination_aria = "Article pages"
+newer_posts = "Newer posts"
+older_posts = "Older posts"
+page_of = "Page {{ .Number }} of {{ .Total }}"
+page_n = "Page {{ .Number }}"
+desc_term = "Browse posts about {{ .Topic }} on {{ .Site }}."
+desc_taxonomy = "Explore {{ .Name }} on {{ .Site }}."
+blog_eyebrow = "The blog"
+list_eyebrow = "Explore the archive"
+blog_heading = "Ramblings, with a purpose"
+articles = "Articles"
+
+# Cards and articles
+min_read = "{{ .Count }} min read"
+read_story = "Read the story"
+read_story_aria = "Read {{ .Title }}"
+back_to_blog = "Back to the blog"
+back_home = "Back home"
+by_author = "By {{ .Name }}"
+toc = "In this article"
+more_about_me = "More about me"
+more_articles = "More articles"
+older_story = "Older story"
+newer_story = "Newer story"
+related_heading = "Related articles"
+
+# Search (the {count} placeholder is filled in by the browser)
+search_label = "Find something interesting"
+search_placeholder = "Search articles, ideas, and topics…"
+browse_topics = "Browse all topics"
+search_searching = "Searching the archive…"
+search_found_one = "{count} article found."
+search_found_other = "{count} articles found."
+search_none = "No articles found. Try another word or browse the topics."
+search_error = "Search is unavailable right now. You can still browse the archive below."
+
+# Copy buttons and sharing
+copy_code = "Copy code"
+copied = "Copied"
+copy_failed = "Copy failed"
+copy_code_done = "Code copied to clipboard."
+copy_code_failed = "Copy failed. Select the code and copy it manually."
+share_aria = "Share this article"
+share_label = "Share"
+share_email = "Email"
+copy_link = "Copy link"
+copy_link_done = "Link copied to clipboard."
+copy_link_failed = "Copy failed. The link to this article is:"
+
+# Homepage defaults (used when params.home leaves them out)
+home_headline_1 = "Curiosity."
+home_headline_2 = "Code."
+home_headline_accent = "Community."
+home_intro_1 = "A personal site about the work, ideas, and people that matter to me."
+home_intro_2 = "Follow along as I learn, build, and share what I discover."
+home_area_1 = "Ideas"
+home_area_2 = "Projects"
+home_area_3 = "Community"
+home_archive_eyebrow = "From the archive"
+home_archive_title = "More from the journey"
+home_search_full_blog = "Search and explore the full blog"
+home_about_text = "A little about me"
+home_blog_text = "Read the blog"
+home_latest_eyebrow = "Notes from the journey"
+home_latest_title = "Lately, on the blog"
+home_latest_link = "All the posts"
+home_topics_label = "Explore a few topics"
+home_highlights_eyebrow = "Beyond the blog"
+home_highlights_title = "A few ways I show up"
+home_cta_eyebrow = "Keep the conversation going"
+home_cta_title = "Good things start with a hello."
+home_cta_text = "Questions, ideas, or a shared curiosity. I'd love to connect."
+home_cta_link = "Get in touch"
+
+# Projects and speaking defaults
+projects_eyebrow = "Always a side project"
+projects_heading = "Built out of curiosity"
+projects_github = "Explore my GitHub"
+projects_list_heading = "From the workbench"
+speaking_eyebrow = "Speaking"
+speaking_topics_aria = "Speaking topics"
+speaking_invite = "Invite me to speak"
+speaking_profile = "Sessionize profile"
+speaking_talks_heading = "Latest talks and podcast appearances"
+read_post = "Read the post"
+all_conference_posts = "All conference posts"
+all_podcast_posts = "All podcast posts"
+no_talks = "No talks or podcast appearances yet."
+
+# 404
+not_found_eyebrow = "404 / Off the beaten path"
+not_found_title = "This page wandered off"
+not_found_text = "Let’s get you back to something interesting."
+head_home = "Head home"
+explore_blog = "Explore the blog"
+
+# Plural forms go last: in TOML, every key after a [table] header belongs to it.
+[posts_count]
+one = "{{ .Count }} blog post"
+other = "{{ .Count }} blog posts"

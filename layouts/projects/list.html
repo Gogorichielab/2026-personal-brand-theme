@@ -1,13 +1,13 @@
 {{ define "main" }}
 	<section class="page-intro wrap">
-		<p class="eyebrow">{{ .Params.eyebrow | default "Always a side project" }}</p>
-		<h1>{{ .Params.heading | default "Built out of curiosity" }}<span>.</span></h1>
+		<p class="eyebrow">{{ .Params.eyebrow | default (T "projects_eyebrow") }}</p>
+		<h1>{{ .Params.heading | default (T "projects_heading") }}<span>.</span></h1>
 		<div class="intro-copy">{{ .Content }}</div>
-		{{ with .Site.Params.brand.github_url }}<a class="button" href="{{ . }}">{{ $.Params.github_text | default "Explore my GitHub" }} <span aria-hidden="true">↗</span></a>{{ end }}
+		{{ with .Site.Params.brand.github_url }}<a class="button" href="{{ . }}">{{ $.Params.github_text | default (T "projects_github") }} <span aria-hidden="true">↗</span></a>{{ end }}
 	</section>
 	<section class="wrap section-tight">
 		<div class="section-heading">
-			<h2>{{ .Params.list_heading | default "From the workbench" }}<span>.</span></h2>
+			<h2>{{ .Params.list_heading | default (T "projects_list_heading") }}<span>.</span></h2>
 		</div>
 		<div class="archive-grid">
 			{{ $projects := slice }}

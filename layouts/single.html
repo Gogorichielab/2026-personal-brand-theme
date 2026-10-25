@@ -1,15 +1,15 @@
 {{ define "main" }}
 	<article class="article wrap">
 		<header class="article-header">
-			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relURL }}{{ else }}{{ site.Home.RelPermalink }}{{ end }}">
-				← {{ if eq .Section "blog" }}Back to the blog{{ else }}Back home{{ end }}
+			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relLangURL }}{{ else }}{{ site.Home.RelPermalink }}{{ end }}">
+				← {{ if eq .Section "blog" }}{{ T "back_to_blog" }}{{ else }}{{ T "back_home" }}{{ end }}
 			</a>
 			<h1>{{ .Title }}</h1>
 			{{ if eq .Section "blog" }}
 				<div class="post-meta">
-					<span>By {{ .Site.Params.author.name | default .Site.Title }}</span>
-					<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
-					<span>{{ .ReadingTime }} min read</span>
+					<span>{{ T "by_author" (dict "Name" (.Site.Params.author.name | default .Site.Title)) }}</span>
+					<time datetime="{{ .Date.Format "2006-01-02" }}">{{ time.Format ":date_long" .Date }}</time>
+					<span>{{ T "min_read" (dict "Count" .ReadingTime) }}</span>
 				</div>
 			{{ end }}
 			{{ with .Params.lead }}
@@ -20,7 +20,7 @@
 			{{ if and (eq .Section "blog") (ge .WordCount 600) .Fragments.Headings }}
 				{{ with .TableOfContents }}
 					<details class="toc">
-						<summary>In this article</summary>
+						<summary>{{ T "toc" }}</summary>
 						{{ . }}
 					</details>
 				{{ end }}
@@ -32,6 +32,7 @@
 						<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
 					{{ end }}
 				</div>
+				{{ if site.Params.share.enabled }}{{ partial "share.html" . }}{{ end }}
 				{{ with .Site.Params.author }}
 					{{ if or .name .bio }}
 						<aside class="author-note">
@@ -39,17 +40,17 @@
 							<div>
 								<strong>{{ .name | default $.Site.Title }}</strong>
 								{{ with .bio }}<p>{{ . }}</p>{{ end }}
-								<a href="{{ $.Site.Params.brand.about_url | default "about/" | relURL }}">{{ $.Site.Params.brand.about_text | default "More about me" }} ↗</a>
+								<a href="{{ $.Site.Params.brand.about_url | default "about/" | relLangURL }}">{{ $.Site.Params.brand.about_text | default (T "more_about_me") }} ↗</a>
 							</div>
 						</aside>
 					{{ end }}
 				{{ end }}
-				<nav class="article-neighbors" aria-label="More articles">
+				<nav class="article-neighbors" aria-label="{{ T "more_articles" }}">
 					{{ with .PrevInSection }}
-						<a href="{{ .RelPermalink }}"><small>← Older story</small>{{ .Title }}</a>
+						<a href="{{ .RelPermalink }}"><small>← {{ T "older_story" }}</small>{{ .Title }}</a>
 					{{ end }}
 					{{ with .NextInSection }}
-						<a href="{{ .RelPermalink }}"><small>Newer story →</small>{{ .Title }}</a>
+						<a href="{{ .RelPermalink }}"><small>{{ T "newer_story" }} →</small>{{ .Title }}</a>
 					{{ end }}
 				</nav>
 			{{ end }}
@@ -59,7 +60,7 @@
 		{{ with first (site.Params.related.limit | default 3) (where (site.RegularPages.Related .) "Section" "blog") }}
 			<section class="wrap section-tight" aria-labelledby="related-title">
 				<div class="section-heading">
-					<h2 id="related-title">{{ site.Params.related.heading | default "Related articles" }}<span>.</span></h2>
+					<h2 id="related-title">{{ site.Params.related.heading | default (T "related_heading") }}<span>.</span></h2>
 				</div>
 				<div class="archive-grid">
 					{{ range . }}

@@ -5,15 +5,15 @@
 				<a class="wordmark" href="{{ site.Home.RelPermalink }}">{{ .Site.Params.brand.name | default .Site.Title }}<span>{{ .Site.Params.brand.mark | default "." }}</span></a>
 				{{ with .Site.Params.brand.footer_tagline }}<p>{{ . }}</p>{{ end }}
 			</div>
-			<nav aria-label="Social links">
+			<nav aria-label="{{ T "nav_social" }}">
 				{{ range .Site.Params.social }}<a href="{{ .url }}">{{ .name }} ↗</a>{{ end }}
-				{{ with .Site.GetPage "section" "blog" }}<a href="{{ "blog/index.xml" | relURL }}">RSS ↗</a>{{ end }}
+				{{ with .Site.GetPage "section" "blog" }}<a href="{{ "blog/index.xml" | relLangURL }}">{{ T "rss" }} ↗</a>{{ end }}
 			</nav>
 		</div>
 		<div class="footer-bottom">
 			<span>© {{ now.Year }} {{ .Site.Params.author.name | default .Site.Title }}</span>
-			<span>Product of <a href="https://gogorichielab.github.io/2026-personal-brand-theme/">Gogorichielab</a> | Built with <a href="https://gohugo.io/">Hugo</a></span>
-			{{ with .Site.GetPage "taxonomy" "tags" }}<a href="{{ .RelPermalink }}">Explore all topics ↗</a>{{ end }}
+			<span>{{ T "footer_product_of" }} <a href="https://gogorichielab.github.io/2026-personal-brand-theme/">Gogorichielab</a> | {{ T "footer_built_with" }} <a href="https://gohugo.io/">Hugo</a></span>
+			{{ with .Site.GetPage "taxonomy" "tags" }}<a href="{{ .RelPermalink }}">{{ T "explore_topics" }} ↗</a>{{ end }}
 		</div>
 	</div>
 </footer>

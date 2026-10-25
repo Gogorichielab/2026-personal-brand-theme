@@ -65,3 +65,8 @@ body.speaking-page { background: var(--stage); }
 }
 .copy-code{display:block;margin:0 0 8px auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:5px 12px;font:600 12px/1.4 var(--text);cursor:pointer}
 .copy-code:hover{border-color:var(--ink)}
+.article-share{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:28px;font-size:13px}
+.article-share .share-label{font-weight:700;text-transform:uppercase;letter-spacing:1.4px;font-size:10px;color:var(--muted)}
+.article-share .copy-code{margin:0}
+.share-fallback{font-size:13px;overflow-wrap:anywhere}
+.lang-nav .nav-list{gap:14px;justify-content:flex-start}

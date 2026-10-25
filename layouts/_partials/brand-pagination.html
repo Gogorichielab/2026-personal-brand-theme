@@ -1,9 +1,9 @@
 {{ with .Paginator }}
 	{{ if gt .TotalPages 1 }}
-		<nav class="pagination" aria-label="Article pages">
-			{{ if .HasPrev }}<a href="{{ .Prev.URL }}">← Newer posts</a>{{ end }}
-			<span>Page {{ .PageNumber }} of {{ .TotalPages }}</span>
-			{{ if .HasNext }}<a href="{{ .Next.URL }}">Older posts →</a>{{ end }}
+		<nav class="pagination" aria-label="{{ T "pagination_aria" }}">
+			{{ if .HasPrev }}<a href="{{ .Prev.URL }}">← {{ T "newer_posts" }}</a>{{ end }}
+			<span>{{ T "page_of" (dict "Number" .PageNumber "Total" .TotalPages) }}</span>
+			{{ if .HasNext }}<a href="{{ .Next.URL }}">{{ T "older_posts" }} →</a>{{ end }}
 		</nav>
 	{{ end }}
 {{ end }}
