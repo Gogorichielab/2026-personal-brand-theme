@@ -10,6 +10,14 @@
 				{{ with .Site.GetPage "section" "blog" }}<a href="{{ "blog/index.xml" | relLangURL }}">{{ T "rss" }} ↗</a>{{ end }}
 			</nav>
 		</div>
+		{{ with site.Params.colors }}{{ if eq .appearance "toggle" }}
+			<div class="appearance" role="group" aria-labelledby="appearance-label" hidden>
+				<span id="appearance-label">{{ T "appearance" }}</span>
+				<button type="button" value="light">{{ T "appearance_light" }}</button>
+				<button type="button" value="dark">{{ T "appearance_dark" }}</button>
+				<button type="button" value="system">{{ T "appearance_system" }}</button>
+			</div>
+		{{ end }}{{ end }}
 		<div class="footer-bottom">
 			<span>© {{ now.Year }} {{ .Site.Params.author.name | default .Site.Title }}</span>
 			<span>{{ T "footer_product_of" }} <a href="https://gogorichielab.github.io/2026-personal-brand-theme/">Gogorichielab</a> | {{ T "footer_built_with" }} <a href="https://gohugo.io/">Hugo</a></span>

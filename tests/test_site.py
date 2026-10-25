@@ -467,7 +467,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("lang-nav", (output / "index.html").read_text())
 
     def test_dark_appearance(self):
-        for output, _, _ in self.sites:  # the example site opts into "auto"
+        for output, _, _ in self.sites:  # the example site opts into "toggle", which includes "auto"
             css = self.stylesheet(output)
             self.assertIn("prefers-color-scheme:dark", css)
             self.assertIn("--ink:#e4edf6", css)
@@ -480,6 +480,26 @@ class SiteTests(unittest.TestCase):
         result, _ = self.build("bad-appearance", '[params.colors]\nappearance = "dim"\n')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("params.colors.appearance", result.stderr)
+
+    def test_appearance_toggle(self):
+        for output, base, _ in self.sites:
+            with self.subTest(base=base):
+                page = (output / "index.html").read_text()
+                head = page.split("</head>", 1)[0]
+                self.assertIn('localStorage.getItem("appearance")', head)  # inline, so a saved choice applies before paint
+                control = re.search(r'<div class="?appearance"?.*?</div>', page, re.S).group(0)
+                self.assertRegex(control, r'role="?group"? aria-labelledby="?appearance-label"? hidden')
+                self.assertEqual(re.findall(r'value="?(\w+)"?>', control), ["light", "dark", "system"])
+                self.assertIn(">Oscuro<", (output / "es/index.html").read_text())
+                css = self.stylesheet(output)
+                self.assertIn(":root[data-appearance=dark]{", css)
+                self.assertIn(":root:not([data-appearance=light])", css)
+        result, output = self.build("auto-only", '[params.colors]\nappearance = "auto"\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        page = (output / "index.html").read_text()
+        self.assertNotIn("localStorage", page)
+        self.assertNotIn('class="appearance"', page)
+        self.assertIn("prefers-color-scheme:dark", self.stylesheet(output))
 
     def test_default_brand_colors(self):
         for output, _, _ in self.sites:

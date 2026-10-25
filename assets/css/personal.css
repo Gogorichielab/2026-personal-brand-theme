@@ -75,3 +75,7 @@ body.speaking-page { background: var(--stage); }
 .series-box summary{cursor:pointer;font-weight:700;margin-top:8px}
 .series-box ol{margin:10px 0 0;padding-left:22px}
 .series-box [aria-current]{font-weight:700;text-decoration:none}
+.appearance{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-bottom:22px;font-size:12px}
+.appearance span{color:var(--muted);margin-right:6px}
+.appearance button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:4px 12px;font:600 12px/1.4 var(--text);cursor:pointer}
+.appearance button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}

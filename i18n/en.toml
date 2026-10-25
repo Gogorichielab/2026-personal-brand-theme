@@ -13,6 +13,10 @@ rss = "RSS"
 footer_product_of = "Product of"
 footer_built_with = "Built with"
 explore_topics = "Explore all topics"
+appearance = "Appearance"
+appearance_light = "Light"
+appearance_dark = "Dark"
+appearance_system = "System"
 
 # Archives and pagination
 pagination_aria = "Article pages"
