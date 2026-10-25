@@ -11,9 +11,6 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Belt-and-braces guard against re-triggering on the changelog commit this
-    # workflow pushes (GITHUB_TOKEN pushes don't trigger workflows anyway).
-    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -22,15 +19,15 @@ jobs:
           # since the previous release tag.
           fetch-depth: 0
 
-      - name: Generate changelog entry and bump version
+      - name: Determine version and generate release notes
         id: changelog
         uses: TriPSs/conventional-changelog-action@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          git-message: 'chore(release): {version}'
-          # No package.json in a Hugo theme: derive versions from v* git tags.
-          skip-version-file: true
-          output-file: CHANGELOG.md
+          # main only accepts changes via PRs, so don't commit; just tag the
+          # merge commit (versions come from v* tags) and publish notes on the release.
+          skip-commit: true
+          output-file: 'false'
           tag-prefix: v
           fallback-version: 0.1.0
           # Don't cut a release when the push contains no releasable commits
