@@ -1,0 +1,32 @@
+{{ define "main" }}
+	<section class="page-intro wrap">
+		<p class="eyebrow">{{ if eq .Section "blog" }}The blog{{ else }}Explore the archive{{ end }}</p>
+		<h1>{{ if eq .Section "blog" }}Ramblings, with a purpose{{ else }}{{ .Title }}{{ end }}<span>.</span></h1>
+		<div class="intro-copy">{{ .Content }}</div>
+	</section>
+	<section class="wrap archive section-tight">
+		{{ if and (eq .Section "blog") .Site.Params.search.enabled }}
+			<div class="archive-tools">
+				<label for="blog-search">Find something interesting</label>
+				<input id="blog-search" type="search" placeholder="Search articles, ideas, and topics…" data-index="{{ "blog/search.json" | relURL }}" aria-describedby="search-status">
+				<p id="search-status" class="search-status" role="status" aria-live="polite"></p>
+				<a class="text-link" href="{{ "tags/" | relURL }}">Browse all topics ↗</a>
+			</div>
+		{{ end }}
+		<h2 class="sr-only">Articles</h2>
+		<div id="archive-default">
+			<div class="archive-grid">
+				{{ $pages := .RegularPagesRecursive }}
+				{{ if eq .Kind "taxonomy" }}
+					{{ $pages = .Pages }}
+				{{ end }}
+				{{ $paginator := .Paginate $pages }}
+				{{ range $paginator.Pages }}
+					{{ partial "writing-card.html" . }}
+				{{ end }}
+			</div>
+			{{ partial "brand-pagination.html" . }}
+		</div>
+		{{ if and (eq .Section "blog") .Site.Params.search.enabled }}<div id="search-results" class="archive-grid" hidden></div>{{ end }}
+	</section>
+{{ end }}

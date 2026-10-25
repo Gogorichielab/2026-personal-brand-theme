@@ -1,0 +1,54 @@
+baseURL = "https://example.org/"
+title = "Example Person"
+theme = "2026-personal-brand-theme"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 6
+
+[Params]
+  description = "A personal site about ideas, projects, and community."
+
+[Params.author]
+  name = "Example Person"
+  location = "Somewhere"
+  bio = "A short biography about the person behind this site."
+
+[Params.brand]
+  name = "Example Person"
+  mark = "."
+  connect_url = "https://example.org/contact/"
+  connect_text = "Let's connect"
+  footer_tagline = "Always learning and sharing."
+
+[Params.home]
+  headline = ["Curiosity.", "Ideas."]
+  headline_accent = "Community."
+  intro = ["A personal site about the work, ideas, and people that matter to me.", "Follow along as I learn, build, and share what I discover."]
+  areas = ["Ideas", "Projects", "Community"]
+  topics = ["Notes"]
+  cta_url = "https://example.org/contact/"
+
+[Params.search]
+  enabled = true
+
+[[Params.social]]
+  name = "GitHub"
+  url = "https://github.com/example"
+
+[outputFormats.Search]
+  mediaType = "application/json"
+  baseName = "search"
+  isPlainText = true
+  notAlternative = true
+
+[[menu.main]]
+  name = "About"
+  identifier = "about"
+  weight = 1
+  url = "/about/"
+[[menu.main]]
+  name = "Blog"
+  identifier = "blog"
+  weight = 2
+  url = "/blog/"

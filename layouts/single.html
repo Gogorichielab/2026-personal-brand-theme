@@ -1,0 +1,58 @@
+{{ define "main" }}
+	<article class="article wrap">
+		<header class="article-header">
+			<a class="eyebrow back-link" href="{{ if eq .Section "blog" }}{{ "blog/" | relURL }}{{ else }}{{ "/" | relURL }}{{ end }}">
+				← {{ if eq .Section "blog" }}Back to the blog{{ else }}Back home{{ end }}
+			</a>
+			<h1>{{ .Title }}</h1>
+			{{ if eq .Section "blog" }}
+				<div class="post-meta">
+					<span>By {{ .Site.Params.author.name | default .Site.Title }}</span>
+					<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+					<span>{{ .ReadingTime }} min read</span>
+				</div>
+			{{ end }}
+			{{ with .Params.lead }}
+				<p class="large-copy">{{ . }}</p>
+			{{ end }}
+		</header>
+		<div class="article-body">
+			{{ if and (eq .Section "blog") (ge .WordCount 600) .Fragments.Headings }}
+				{{ with .TableOfContents }}
+					<details class="toc">
+						<summary>In this article</summary>
+						{{ . }}
+					</details>
+				{{ end }}
+			{{ end }}
+			{{ .Content }}
+			{{ if eq .Section "blog" }}
+				<div class="article-tags">
+					{{ range .GetTerms "tags" }}
+						<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+					{{ end }}
+				</div>
+				{{ with .Site.Params.author }}
+					{{ if or .name .bio }}
+						<aside class="author-note">
+							{{ with .image }}<img src="{{ . | relURL }}" width="64" height="64" alt="">{{ end }}
+							<div>
+								<strong>{{ .name | default $.Site.Title }}</strong>
+								{{ with .bio }}<p>{{ . }}</p>{{ end }}
+								<a href="{{ $.Site.Params.brand.about_url | default "about/" | relURL }}">{{ $.Site.Params.brand.about_text | default "More about me" }} ↗</a>
+							</div>
+						</aside>
+					{{ end }}
+				{{ end }}
+				<nav class="article-neighbors" aria-label="More articles">
+					{{ with .PrevInSection }}
+						<a href="{{ .RelPermalink }}"><small>← Older story</small>{{ .Title }}</a>
+					{{ end }}
+					{{ with .NextInSection }}
+						<a href="{{ .RelPermalink }}"><small>Newer story →</small>{{ .Title }}</a>
+					{{ end }}
+				</nav>
+			{{ end }}
+		</div>
+	</article>
+{{ end }}

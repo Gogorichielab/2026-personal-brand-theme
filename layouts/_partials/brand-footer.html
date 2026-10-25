@@ -1,0 +1,19 @@
+<footer class="site-footer">
+	<div class="wrap">
+		<div class="footer-top">
+			<div>
+				<a class="wordmark" href="{{ "/" | relURL }}">{{ .Site.Params.brand.name | default .Site.Title }}<span>{{ .Site.Params.brand.mark | default "." }}</span></a>
+				{{ with .Site.Params.brand.footer_tagline }}<p>{{ . }}</p>{{ end }}
+			</div>
+			<nav aria-label="Social links">
+				{{ range .Site.Params.social }}<a href="{{ .url }}">{{ .name }} ↗</a>{{ end }}
+				{{ with .Site.GetPage "section" "blog" }}<a href="{{ "blog/index.xml" | relURL }}">RSS ↗</a>{{ end }}
+			</nav>
+		</div>
+		<div class="footer-bottom">
+			<span>© {{ now.Year }} {{ .Site.Params.author.name | default .Site.Title }}</span>
+			<span>{{ .Site.Params.brand.footer_note | default "Built with" }} <a href="https://gohugo.io/">Hugo</a>.</span>
+			{{ with .Site.GetPage "taxonomy" "tags" }}<a href="{{ .RelPermalink }}">Explore all topics ↗</a>{{ end }}
+		</div>
+	</div>
+</footer>

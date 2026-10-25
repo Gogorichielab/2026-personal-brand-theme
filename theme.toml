@@ -1,0 +1,12 @@
+name = "2026 Personal Brand Theme"
+license = "MIT"
+licenselink = "https://github.com/Gogorichielab/2026-personal-brand-theme/blob/main/LICENSE"
+description = "A clean, personal-brand-first Hugo theme with content close behind."
+homepage = "https://github.com/Gogorichielab/2026-personal-brand-theme"
+tags = ["blog", "personal", "portfolio", "responsive"]
+features = ["responsive", "accessible", "blog search", "social metadata"]
+min_version = "0.146.0"
+
+[author]
+  name = "Gogorichielab"
+  homepage = "https://github.com/Gogorichielab"
