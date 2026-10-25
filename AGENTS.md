@@ -29,5 +29,6 @@ Use the existing label exactly as named; don't create variants.
 
 ## Checking your work
 
-- If an `exampleSite/` exists, build it with `hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme` and fix any errors or warnings.
+- Build the demo with `hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme` and fix any errors or warnings. `.github/workflows/pages.yml` deploys it to GitHub Pages on every push to `main`.
+- The demo is served from a subpath (`/2026-personal-brand-theme/`), so build links with `relURL`/`.RelPermalink` and never `"/" | relURL` (a leading slash drops the subpath); use `site.Home.RelPermalink` for the home link.
 - Keep pages accessible: semantic HTML, alt text, visible focus states, sufficient color contrast.

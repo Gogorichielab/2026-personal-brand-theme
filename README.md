@@ -84,7 +84,7 @@ Search is opt-in. To enable it, add `enabled = true` under `[params.search]`, co
 outputs: ["HTML", "RSS", "Search"]
 ```
 
-See [`exampleSite/`](exampleSite/) for a working minimal setup. The build command from the theme repository is:
+See [`exampleSite/`](exampleSite/) for a working minimal setup, deployed as a live demo at <https://gogorichielab.github.io/2026-personal-brand-theme/>. The build command from the theme repository is:
 
 ```sh
 hugo --source exampleSite --themesDir ../.. --theme 2026-personal-brand-theme --minify
